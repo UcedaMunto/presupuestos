@@ -13,3 +13,5 @@ WORKDIR /var/www/html
 
 # Configuración de permisos
 RUN usermod -u 1000 www-data
+
+
