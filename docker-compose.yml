@@ -5,17 +5,23 @@ services:
     build:
       context: ./php
     container_name: symfony_app
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     working_dir: /var/www/html
     volumes:
       - ./php/vendor/symfony/flex/src/presupuesto:/var/www/html
     environment:
       - SYMFONY_ENV=dev
+    networks:
+      - symfony_network
     #depends_on:
     #  - db
 
   web:
     image: nginx:latest
     container_name: symfony_web
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     ports:
       - "8080:80"
     volumes:
@@ -23,5 +29,10 @@ services:
       - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
     depends_on:
       - app
+    networks:
+      - symfony_network
 
 #volumes:
+networks:
+  symfony_network:
+    driver: bridge

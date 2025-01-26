@@ -10,6 +10,10 @@ COPY --from=composer:2.6 /usr/bin/composer /usr/bin/composer
 
 # Establecemos el directorio de trabajo
 WORKDIR /var/www/html
+RUN apt-get update
+RUN docker-php-ext-install pdo_pgsql
+RUN apt-get update
+RUN apt install -y postgresql-client
 
 # Configuración de permisos
 RUN usermod -u 1000 www-data
