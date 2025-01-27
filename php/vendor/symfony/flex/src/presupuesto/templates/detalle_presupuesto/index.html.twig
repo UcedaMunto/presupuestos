@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}DetallePresupuesto index{% endblock %}
+
+{% block body %}
+    <h1>DetallePresupuesto index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Cantidad</th>
+                <th>Precio_initario</th>
+                <th>Sub_total</th>
+                <th>Item_presupuesto_id</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for detalle_presupuesto in detalle_presupuestos %}
+            <tr>
+                <td>{{ detalle_presupuesto.id }}</td>
+                <td>{{ detalle_presupuesto.cantidad }}</td>
+                <td>{{ detalle_presupuesto.precioInitario }}</td>
+                <td>{{ detalle_presupuesto.subTotal }}</td>
+                <td>{{ detalle_presupuesto.itemPresupuestoId }}</td>
+                <td>
+                    <a href="{{ path('app_detalle_presupuesto_show', {'id': detalle_presupuesto.id}) }}">show</a>
+                    <a href="{{ path('app_detalle_presupuesto_edit', {'id': detalle_presupuesto.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="6">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_detalle_presupuesto_new') }}">Create new</a>
+{% endblock %}

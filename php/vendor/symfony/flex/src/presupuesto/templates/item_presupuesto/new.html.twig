@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New ItemPresupuesto{% endblock %}
+
+{% block body %}
+    <h1>Create new ItemPresupuesto</h1>
+
+    {{ include('item_presupuesto/_form.html.twig') }}
+
+    <a href="{{ path('app_item_presupuesto_index') }}">back to list</a>
+{% endblock %}

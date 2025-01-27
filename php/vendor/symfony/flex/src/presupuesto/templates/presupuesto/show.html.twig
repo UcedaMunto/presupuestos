@@ -1,0 +1,54 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Presupuesto{% endblock %}
+
+{% block body %}
+    <h1>Presupuesto</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ presupuesto.id }}</td>
+            </tr>
+            <tr>
+                <th>Nombre</th>
+                <td>{{ presupuesto.nombre }}</td>
+            </tr>
+            <tr>
+                <th>MontoTotal</th>
+                <td>{{ presupuesto.montoTotal }}</td>
+            </tr>
+            <tr>
+                <th>FechaInicio</th>
+                <td>{{ presupuesto.fechaInicio ? presupuesto.fechaInicio|date('Y-m-d') : '' }}</td>
+            </tr>
+            <tr>
+                <th>FechaFin</th>
+                <td>{{ presupuesto.fechaFin ? presupuesto.fechaFin|date('Y-m-d') : '' }}</td>
+            </tr>
+            <tr>
+                <th>Estado</th>
+                <td>{{ presupuesto.estado ? 'Yes' : 'No' }}</td>
+            </tr>
+            <tr>
+                <th>Created_at</th>
+                <td>{{ presupuesto.createdAt ? presupuesto.createdAt|date('Y-m-d H:i:s') : '' }}</td>
+            </tr>
+            <tr>
+                <th>Fecha_aprrobaci√on</th>
+                <td>{{ presupuesto.fechaAprrobaci√on ? presupuesto.fechaAprrobaci√on|date('Y-m-d H:i:s') : '' }}</td>
+            </tr>
+            <tr>
+                <th>Total</th>
+                <td>{{ presupuesto.total }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_presupuesto_index') }}">back to list</a>
+
+    <a href="{{ path('app_presupuesto_edit', {'id': presupuesto.id}) }}">edit</a>
+
+    {{ include('presupuesto/_delete_form.html.twig') }}
+{% endblock %}

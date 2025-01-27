@@ -1,0 +1,30 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}ItemPresupuesto{% endblock %}
+
+{% block body %}
+    <h1>ItemPresupuesto</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ item_presupuesto.id }}</td>
+            </tr>
+            <tr>
+                <th>Nombre</th>
+                <td>{{ item_presupuesto.nombre }}</td>
+            </tr>
+            <tr>
+                <th>Precio</th>
+                <td>{{ item_presupuesto.precio }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_item_presupuesto_index') }}">back to list</a>
+
+    <a href="{{ path('app_item_presupuesto_edit', {'id': item_presupuesto.id}) }}">edit</a>
+
+    {{ include('item_presupuesto/_delete_form.html.twig') }}
+{% endblock %}
