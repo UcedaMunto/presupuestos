@@ -15,7 +15,7 @@
                 <th>FechaFin</th>
                 <th>Estado</th>
                 <th>Created_at</th>
-                <th>Fecha_aprrobaci√on</th>
+                <th>fecha aprobacion</th>
                 <th>Total</th>
                 <th>actions</th>
             </tr>
@@ -30,7 +30,7 @@
                 <td>{{ presupuesto.fechaFin ? presupuesto.fechaFin|date('Y-m-d') : '' }}</td>
                 <td>{{ presupuesto.estado ? 'Yes' : 'No' }}</td>
                 <td>{{ presupuesto.createdAt ? presupuesto.createdAt|date('Y-m-d H:i:s') : '' }}</td>
-                <td>{{ presupuesto.fechaAprrobaci√on ? presupuesto.fechaAprrobaci√on|date('Y-m-d H:i:s') : '' }}</td>
+                <td>{{ presupuesto.fechaAprobacion ? presupuesto.fechaAprobacion|date('Y-m-d H:i:s') : '' }}</td>
                 <td>{{ presupuesto.total }}</td>
                 <td>
                     <a href="{{ path('app_presupuesto_show', {'id': presupuesto.id}) }}">show</a>

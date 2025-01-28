@@ -54,6 +54,7 @@ class Presupuesto
     public function __construct()
     {
         $this->detallePresupuestos = new ArrayCollection();
+        $this->created_at = new \DateTimeImmutable(); // Asigna la fecha y hora actual
     }
 
     public function getId(): ?int

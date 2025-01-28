@@ -19,8 +19,7 @@ class PresupuestoType extends AbstractType
             ->add('fechaInicio', null)
             ->add('fechaFin', null)
             ->add('estado')
-            ->add('created_at', null)
-            ->add('fecha_aprobacion', null)
+            
             ->add('total')
             ->add('id_estado', EntityType::class, [
                 'class' => EstadoPresupuesto::class,
