@@ -2,11 +2,10 @@
 
 namespace App\Entity;
 
-use App\Repository\ItemPresupuestoRepository;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: ItemPresupuestoRepository::class)]
-class ItemPresupuesto
+#[ORM\MappedSuperclass]
+abstract class ItemPresupuesto
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]

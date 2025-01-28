@@ -14,7 +14,8 @@ RUN apt-get update
 RUN docker-php-ext-install pdo_pgsql
 RUN apt-get update
 RUN apt install -y postgresql-client
-
+RUN composer require twig/cache-extra
+RUN composer require twig/extra-bundle
 # Configuración de permisos
 RUN usermod -u 1000 www-data
 

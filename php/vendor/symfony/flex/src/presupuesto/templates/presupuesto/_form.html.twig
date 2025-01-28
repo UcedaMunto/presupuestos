@@ -1,40 +1,46 @@
-{{ form_start(form) }}
 
-<div class="container">
-    <div class="row">
-        <div class="col-md-4">
-            {{ form_row(form.nombre) }}
-        </div>
-        <div class="col-md-4">
-            {{ form_row(form.montoTotal) }}
-        </div>
-        <div class="col-md-4">
-            {{ form_row(form.fechaInicio) }}
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-md-4">
-            {{ form_row(form.fechaFin) }}
-        </div>
-        <div class="col-md-4">
-            {{ form_row(form.estado) }}
-        </div>
-        <div class="col-md-4">
-            {{ form_row(form.total) }}
-        </div>
-    </div>
-    <div class="row">
-        
-        
-        <div class="col-md-4">
-            {{ form_row(form.id_estado) }}
-        </div>
-    </div>
-    <div class="row mt-3">
-        <div class="col-md-12 text-center">
-            <button class="btn btn-primary">{{ button_label|default('Save') }}</button>
-        </div>
-    </div>
-</div>
-{{ form_end(form) }}
+    {{ form_start(form) }}
 
+    <div class="container">
+        <div class="form-group rowform-group row">
+            <div class="col-md-4">
+                {{ form_label(form.nombre) }} <br>
+                {{ form_widget(form.nombre) }}
+            </div>
+            <div class="col-md-4">
+                {{ form_label(form.montoTotal) }} <br>
+                {{ form_widget(form.montoTotal) }}
+            </div>
+            <div class="col-md-4">
+                {{ form_label(form.fechaInicio) }} <br>
+                {{ form_widget(form.fechaInicio) }}
+            </div>
+        </div>
+        <div class="form-group rowform-group row">
+            <div class="col-md-4">
+                {{ form_label(form.fechaFin) }} <br>
+                {{ form_widget(form.fechaFin) }}
+            </div>
+            <div class="col-md-4">
+                {{ form_label(form.estado) }} <br>
+                {{ form_widget(form.estado) }}
+            </div>
+            <div class="col-md-4">
+                {{ form_label(form.total) }} <br>
+                {{ form_widget(form.total) }}
+            </div>
+        </div>
+        <div class="form-group rowform-group row">
+            <div class="col-md-4">
+                {{ form_label(form.id_estado) }} <br>
+                {{ form_widget(form.id_estado) }}
+            </div>
+        </div>
+        <div class="form-group rowform-group row mt-3">
+            <div class="col-md-12 text-center">
+                <button class="btn btn-primary">{{ button_label|default('Save') }}</button>
+            </div>
+        </div>
+    </div>
+
+    {{ form_end(form) }}
