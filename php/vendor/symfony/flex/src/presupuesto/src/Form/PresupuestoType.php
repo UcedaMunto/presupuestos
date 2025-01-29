@@ -14,16 +14,25 @@ class PresupuestoType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('nombre')
-            ->add('montoTotal')
-            ->add('fechaInicio', null)
-            ->add('fechaFin', null)
-            ->add('estado')
-            
-            ->add('total')
+            ->add('nombre', null, [
+                'attr' => ['class' => 'form-control']
+            ])
+            ->add('montoTotal', null, [
+                'attr' => ['class' => 'form-control']
+            ])
+            ->add('fechaInicio', null, [
+                'attr' => ['class' => 'form-control']
+            ])
+            ->add('fechaFin', null, [
+                'attr' => ['class' => 'form-control']
+            ])
+            ->add('estado', null, [
+                'attr' => ['class' => 'form-control']
+            ])
             ->add('id_estado', EntityType::class, [
                 'class' => EstadoPresupuesto::class,
-                'choice_label' => 'id',
+                'choice_label' => 'nombre', // Mostrar el nombre en lugar del ID
+                'attr' => ['class' => 'form-control']
             ])
         ;
     }
