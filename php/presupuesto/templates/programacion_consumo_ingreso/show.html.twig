@@ -1,0 +1,42 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}ProgramacionConsumoIngreso{% endblock %}
+
+{% block body %}
+    <h1>ProgramacionConsumoIngreso</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ programacion_consumo_ingreso.id }}</td>
+            </tr>
+            <tr>
+                <th>Cantidad</th>
+                <td>{{ programacion_consumo_ingreso.cantidad }}</td>
+            </tr>
+            <tr>
+                <th>Tipo</th>
+                <td>{{ programacion_consumo_ingreso.tipo }}</td>
+            </tr>
+            <tr>
+                <th>Frecuencia</th>
+                <td>{{ programacion_consumo_ingreso.frecuencia }}</td>
+            </tr>
+            <tr>
+                <th>FechaInicio</th>
+                <td>{{ programacion_consumo_ingreso.fechaInicio ? programacion_consumo_ingreso.fechaInicio|date('Y-m-d H:i:s') : '' }}</td>
+            </tr>
+            <tr>
+                <th>FechaFin</th>
+                <td>{{ programacion_consumo_ingreso.fechaFin ? programacion_consumo_ingreso.fechaFin|date('Y-m-d H:i:s') : '' }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_programacion_consumo_ingreso_index') }}">back to list</a>
+
+    <a href="{{ path('app_programacion_consumo_ingreso_edit', {'id': programacion_consumo_ingreso.id}) }}">edit</a>
+
+    {{ include('programacion_consumo_ingreso/_delete_form.html.twig') }}
+{% endblock %}

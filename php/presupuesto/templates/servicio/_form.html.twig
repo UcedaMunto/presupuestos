@@ -1,0 +1,34 @@
+{# _form.html.twig para ServicioType #}
+{{ form_start(form) }}
+<div class=" container card border-left-success">
+    <div class="form-group row">
+        <div class="col-md-4">
+            {{ form_label(form.nombre) }} <br>
+            {{ form_widget(form.nombre) }}
+        </div>
+        <div class="col-md-4">
+            {{ form_label(form.tipoServicio) }} <br>
+            {{ form_widget(form.tipoServicio) }}
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-md-4">
+            {{ form_label(form.descripcion) }} <br>
+            {{ form_widget(form.descripcion) }}
+        </div>
+        <div class="col-md-4">
+            {{ form_label(form.precio) }} <br>
+            {{ form_widget(form.precio) }}
+        </div>
+        <div class="col-md-4">
+            {{ form_label(form.duracionMinutos) }} <br>
+            {{ form_widget(form.duracionMinutos) }}
+        </div>
+    </div>
+    <div class="form-group row mt-3">
+        <div class="col-md-12 text-center">
+            <button class="btn btn-primary">{{ button_label|default('Guardar') }}</button>
+        </div>
+    </div>
+</div>
+{{ form_end(form) }}

@@ -1,0 +1,54 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}ReferenciaCompra{% endblock %}
+
+{% block body %}
+    <h1>ReferenciaCompra</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ referencia_compra.id }}</td>
+            </tr>
+            <tr>
+                <th>Proveedor</th>
+                <td>{{ referencia_compra.proveedor }}</td>
+            </tr>
+            <tr>
+                <th>Descripcion</th>
+                <td>{{ referencia_compra.descripcion }}</td>
+            </tr>
+            <tr>
+                <th>Referencia</th>
+                <td>{{ referencia_compra.referencia }}</td>
+            </tr>
+            <tr>
+                <th>Cantidad</th>
+                <td>{{ referencia_compra.cantidad }}</td>
+            </tr>
+            <tr>
+                <th>Foto1</th>
+                <td>{{ referencia_compra.foto1 }}</td>
+            </tr>
+            <tr>
+                <th>Foto2</th>
+                <td>{{ referencia_compra.foto2 }}</td>
+            </tr>
+            <tr>
+                <th>Foto3</th>
+                <td>{{ referencia_compra.foto3 }}</td>
+            </tr>
+            <tr>
+                <th>ActualizadoEn</th>
+                <td>{{ referencia_compra.actualizadoEn ? referencia_compra.actualizadoEn|date('Y-m-d H:i:s') : '' }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_referencia_compra_index') }}">back to list</a>
+
+    <a href="{{ path('app_referencia_compra_edit', {'id': referencia_compra.id}) }}">edit</a>
+
+    {{ include('referencia_compra/_delete_form.html.twig') }}
+{% endblock %}

@@ -9,7 +9,7 @@ services:
       - "host.docker.internal:host-gateway"
     working_dir: /var/www/html
     volumes:
-      - ./php/vendor/symfony/flex/src/presupuesto:/var/www/html
+      - ./php/presupuesto:/var/www/html
     environment:
       - SYMFONY_ENV=dev
     networks:
@@ -25,7 +25,7 @@ services:
     ports:
       - "8080:80"
     volumes:
-      - ./php/vendor/symfony/flex/src/presupuesto:/var/www/html
+      - ./php/presupuesto:/var/www/html
       - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
     depends_on:
       - app

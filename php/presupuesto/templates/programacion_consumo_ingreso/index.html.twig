@@ -1,0 +1,43 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}ProgramacionConsumoIngreso index{% endblock %}
+
+{% block body %}
+    <h1>ProgramacionConsumoIngreso index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Cantidad</th>
+                <th>Tipo</th>
+                <th>Frecuencia</th>
+                <th>FechaInicio</th>
+                <th>FechaFin</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for programacion_consumo_ingreso in programacion_consumo_ingresos %}
+            <tr>
+                <td>{{ programacion_consumo_ingreso.id }}</td>
+                <td>{{ programacion_consumo_ingreso.cantidad }}</td>
+                <td>{{ programacion_consumo_ingreso.tipo }}</td>
+                <td>{{ programacion_consumo_ingreso.frecuencia }}</td>
+                <td>{{ programacion_consumo_ingreso.fechaInicio ? programacion_consumo_ingreso.fechaInicio|date('Y-m-d H:i:s') : '' }}</td>
+                <td>{{ programacion_consumo_ingreso.fechaFin ? programacion_consumo_ingreso.fechaFin|date('Y-m-d H:i:s') : '' }}</td>
+                <td>
+                    <a href="{{ path('app_programacion_consumo_ingreso_show', {'id': programacion_consumo_ingreso.id}) }}">show</a>
+                    <a href="{{ path('app_programacion_consumo_ingreso_edit', {'id': programacion_consumo_ingreso.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="7">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_programacion_consumo_ingreso_new') }}">Create new</a>
+{% endblock %}

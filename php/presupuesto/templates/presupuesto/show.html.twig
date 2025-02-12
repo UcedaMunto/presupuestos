@@ -1,0 +1,91 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Presupuesto{% endblock %}
+
+    {% block body %}
+    <h1>Presupuesto {{ presupuesto.id }} - {{ presupuesto.nombre }}</h1>
+
+    <div class="row">
+        <div class="col-md-4">
+            <a href="{{ path('app_presupuesto_index') }}" class="btn btn-primary btn-block">Lista de presupuestos</a>
+        </div>
+        <div class="col-md-4">
+            <a href="{{ path('app_presupuesto_edit', {'id': presupuesto.id}) }}" class="btn btn-success btn-block">Editar presupuesto</a>
+        </div>
+        <div class="col-md-4">
+            {{ include('presupuesto/_delete_form.html.twig', { 'btn_class': 'btn btn-warning btn-block' }) }}
+        </div>
+    </div>
+
+
+    <div class="card shadow mb-12">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">Datos del presupuesto</h6>
+        </div>
+        <div class="card-body">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-4">
+                        <strong>Id:</strong> {{ presupuesto.id }}
+                    </div>
+                    <div class="col-md-4">
+                        <strong>Nombre:</strong> {{ presupuesto.nombre }}
+                    </div>
+                    <div class="col-md-4">
+                        <strong>Monto Total:</strong> {{ presupuesto.montoTotal }}
+                    </div>
+                    
+                    <div class="col-md-4">
+                        <strong>Fecha Inicio:</strong> {{ presupuesto.fechaInicio ? presupuesto.fechaInicio|date('Y-m-d') : '' }}
+                    </div>
+                    <div class="col-md-4">
+                        <strong>Fecha Fin:</strong> {{ presupuesto.fechaFin ? presupuesto.fechaFin|date('Y-m-d') : '' }}
+                    </div>
+                    <div class="col-md-4">
+                        <strong>Estado:</strong> {{ presupuesto.estado ? 'Yes' : 'No' }}
+                    </div>
+
+                    <div class="col-md-4">
+                        <strong>Created At:</strong> {{ presupuesto.createdAt ? presupuesto.createdAt|date('Y-m-d H:i:s') : '' }}
+                    </div>
+                    <div class="col-md-4">
+                        <strong>Fecha Aprobación:</strong> {{ presupuesto.fechaAprobacion ? presupuesto.fechaAprobacion|date('Y-m-d H:i:s') : '' }}
+                    </div>
+                    <div class="col-md-4">
+                        <strong>Total:</strong> {{ presupuesto.total }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <br>
+
+    <div class="row">
+        <div class="col-md-6">
+            {{ include('form/_ajax_form.html.twig', { form_url: path('app_servicio_new'), button: 'Agregar servicio', 'params_data':"" }) }}
+        </div>
+        <div class="col-md-6">
+            {{ include('form/_ajax_form.html.twig', { form_url: path('app_producto_new'), button: 'Agregar producto', 'params_data':"" }) }}
+        </div>
+    </div>
+
+    <br>
+
+    <div class="row">
+        <div class="col-md-6">
+            {{ include('form/_ajax_form.html.twig', { form_url: path('app_consumo_new') ~ (app.request.query.all() ? '?' ~ app.request.query|url_encode),  button: 'Agregar Consumo', params_data: '?id_presupuesto=' ~ presupuesto.id }) }}
+        </div>
+        <div class="col-md-6">
+
+        </div>
+    </div>
+
+
+    
+    
+
+
+   
+
+{% endblock %}

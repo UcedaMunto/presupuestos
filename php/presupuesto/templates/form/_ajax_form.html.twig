@@ -1,0 +1,74 @@
+<div class="form-container">
+    <button class="toggle-form-btn btn btn-primary" data-url="{{ form_url ~ params_data }}">
+        {{ button }}
+    </button>
+    
+    <div class="form-content" style="display: none;"></div>
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        document.querySelectorAll(".toggle-form-btn").forEach(button => {
+            console.info("00000")
+            button.addEventListener("click", function () {
+                console.info("hhhhhhhh")
+                let formUrl = this.getAttribute("data-url");
+                if( formUrl == "{{ form_url ~ params_data }}" ){
+                    console.info("iiii")
+                    let formContent = this.closest(".form-container").querySelector(".form-content");
+                    if (formContent.style.display === "none") {
+                        console.info("jjj")
+                        if (formContent.innerHTML.trim() === "") {
+                            console.info("kkkk")
+                            // Si el formulario no ha sido cargado, hacer la petición AJAX
+                            fetch(formUrl, { headers: { "X-Requested-With": "XMLHttpRequest" } })
+                                .then(response => response.text())
+                                .then(html => {
+                                    formContent.innerHTML = html;
+                                    formContent.style.display = "block"; // Mostrar formulario
+                                    attachFormSubmitEvent(formContent);
+                                })
+                                .catch(error => console.error("Error al cargar el formulario:", error));
+                        } else {
+                            // Si el formulario ya está cargado, solo mostrarlo
+                            formContent.style.display = "block";
+                        }
+
+                        this.textContent = "Ocultar Formulario"; // Cambia el texto del botón
+                    } else {
+                        // Si el formulario está visible, lo ocultamos y limpiamos para permitir recarga
+                        formContent.style.display = "none";
+                        formContent.innerHTML = ""; // Limpiar contenido para permitir recarga
+                        this.textContent = "{{ button }}"; // Cambia el texto del botón
+                    }
+                }
+                
+            });
+        });
+
+        function attachFormSubmitEvent(container) {
+
+            const form = container.querySelector("form");
+            if (!form) return;
+
+            form.addEventListener("submit", function (e) {
+                e.preventDefault();
+                const formData = new FormData(this);
+
+                fetch(this.action, {
+                    method: this.method,
+                    body: formData,
+                    headers: { "X-Requested-With": "XMLHttpRequest" }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    alert("Formulario enviado con éxito");
+                    container.style.display = "none"; // Ocultar después del envío
+                    container.innerHTML = ""; // Limpiar contenido para permitir recarga
+                    container.closest(".form-container").querySelector(".toggle-form-btn").textContent = "Cargar Formulario";
+                })
+                .catch(error => console.error("Error al enviar el formulario:", error));
+            });
+        }
+    });
+</script>

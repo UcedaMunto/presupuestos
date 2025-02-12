@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New ProgramacionConsumoIngreso{% endblock %}
+
+{% block body %}
+    <h1>Create new ProgramacionConsumoIngreso</h1>
+
+    {{ include('programacion_consumo_ingreso/_form.html.twig') }}
+
+    <a href="{{ path('app_programacion_consumo_ingreso_index') }}">back to list</a>
+{% endblock %}
