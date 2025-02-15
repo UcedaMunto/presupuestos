@@ -2,7 +2,7 @@
 
 {% block title %}Presupuesto{% endblock %}
 
-    {% block body %}
+{% block body %}
     <h1>Presupuesto {{ presupuesto.id }} - {{ presupuesto.nombre }}</h1>
 
     <div class="row">
@@ -16,8 +16,6 @@
             {{ include('presupuesto/_delete_form.html.twig', { 'btn_class': 'btn btn-warning btn-block' }) }}
         </div>
     </div>
-
-
 
     <div class="card shadow mb-12">
         <div class="card-header py-3">
@@ -35,7 +33,6 @@
                     <div class="col-md-4">
                         <strong>Monto Total:</strong> {{ presupuesto.montoTotal }}
                     </div>
-                    
                     <div class="col-md-4">
                         <strong>Fecha Inicio:</strong> {{ presupuesto.fechaInicio ? presupuesto.fechaInicio|date('Y-m-d') : '' }}
                     </div>
@@ -45,7 +42,6 @@
                     <div class="col-md-4">
                         <strong>Estado:</strong> {{ presupuesto.estado ? 'Yes' : 'No' }}
                     </div>
-
                     <div class="col-md-4">
                         <strong>Created At:</strong> {{ presupuesto.createdAt ? presupuesto.createdAt|date('Y-m-d H:i:s') : '' }}
                     </div>
@@ -82,9 +78,30 @@
                 params_data: '?id_presupuesto=' ~ presupuesto.id 
             }) }}
         </div>
-        <div class="col-md-6">
+    </div>
 
+    <br>
+
+    <div class="card shadow mb-12">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">Consumos Registrados</h6>
+        </div>
+        <div class="card-body">
+            <div id="consumos-container">
+               
+            </div>
         </div>
     </div>
 
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            fetch("{{ path('app_consumo_presupuesto', {'id': presupuesto.id}) }}")
+                .then(response => response.text())
+                .then(data => {
+                    let tbody = document.querySelector("#consumos-container");
+                    tbody.innerHTML = data;
+                })
+                .catch(error => console.error('Error al cargar los consumos:', error));
+        });
+    </script>
 {% endblock %}

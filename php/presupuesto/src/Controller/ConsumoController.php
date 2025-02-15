@@ -95,36 +95,34 @@ final class ConsumoController extends AbstractController
     }
 
     #[Route('/presupuesto/{id}', name: 'app_consumo_presupuesto', methods: ['GET'])]
-    public function getConsumosByPresupuesto(int $id, EntityManagerInterface $entityManager): JsonResponse
+    public function getConsumosByPresupuesto(int $id, EntityManagerInterface $entityManager): Response
     {
         $presupuesto = $entityManager->getRepository(Presupuesto::class)->find($id);
 
         if (!$presupuesto) {
-            return new JsonResponse(['error' => 'Presupuesto no encontrado'], 404);
+            throw $this->createNotFoundException('Presupuesto no encontrado');
         }
 
         $consumos = $entityManager->getRepository(Consumo::class)->findBy(['presupuesto' => $presupuesto]);
 
         $data = [];
         foreach ($consumos as $consumo) {
-            if ($consumo->getProducto() != null or $consumo->getServicio() != null){
-                
-                if( $consumo->getProducto() != null ){
+            if ($consumo->getProducto() != null || $consumo->getServicio() != null) {
+                if ($consumo->getProducto() != null) {
                     $nombre = $consumo->getProducto()->getNombre();
-                    $tipo = $consumo->getProducto()->getTipoProducto() ? $consumo->getProducto()->getTipoProducto()->getNombre(): null;
+                    $tipo = $consumo->getProducto()->getTipoProducto() ? $consumo->getProducto()->getTipoProducto()->getNombre() : null;
                     $total = $consumo->getProducto()->getPrecio();
-                }else{
+                } else {
                     $nombre = $consumo->getServicio()->getNombre();
-                    $tipo = $consumo->getServicio()->getTipoProducto() ? $consumo->getServicio()->getTipoProducto()->getNombre(): null;
+                    $tipo = $consumo->getServicio()->getTipoProducto() ? $consumo->getServicio()->getTipoProducto()->getNombre() : null;
                     $total = $consumo->getServicio()->getPrecio();
                 }
-                
 
                 $data[] = [
                     'id' => $consumo->getId(),
                     'presupuesto' => $presupuesto->getNombre(),
                     'nombre' => $nombre,
-                    'tipo'=> $tipo,
+                    'tipo' => $tipo,
                     'cantidad' => $consumo->getCantidad(),
                     'costo_consumo' => $consumo->getTotal(),
                     'costo_prod_servicio' => $total,
@@ -133,7 +131,10 @@ final class ConsumoController extends AbstractController
             }
         }
 
-        return new JsonResponse($data);
+        return $this->render('consumo/data_consumos_prod_serv.html.twig', [
+            'presupuesto' => $presupuesto,
+            'consumos' => $data,
+        ]);
+        
     }
-
 }
