@@ -10,6 +10,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 
 #[Route('/presupuesto')]
@@ -78,5 +79,47 @@ final class PresupuestoController extends AbstractController
         }
 
         return $this->redirectToRoute('app_presupuesto_index', [], Response::HTTP_SEE_OTHER);
+    }
+
+    #[Route('/{id}/productos', name: 'api_presupuesto_productos', methods: ['GET'])]
+    public function getProductos(Request $request, int $id, PresupuestoRepository $presupuestoRepository): JsonResponse
+    {
+        $presupuesto = $presupuestoRepository->find($id);
+        if (!$presupuesto) {
+            return $this->json(['error' => 'Presupuesto no encontrado'], Response::HTTP_NOT_FOUND);
+        }
+
+        $productos = $presupuesto->getProductos();
+        
+        $data = array_map(fn($producto) => [
+            'id' => $producto->getId(),
+            'nombre' => $producto->getNombre(),
+            'precio' => $producto->getPrecio(),
+            'descripcion' => $producto->getDescripcion(),
+            'unidadMedida' => $producto->getUnidadMedida(),
+        ], $productos);
+        
+        return $this->json($data);
+    }
+
+    #[Route('/{id}/servicios', name: 'api_presupuesto_servicios', methods: ['GET'])]
+    public function getServicios(Request $request,int $id, PresupuestoRepository $presupuestoRepository): JsonResponse
+    {
+        $presupuesto = $presupuestoRepository->find($id);
+        if (!$presupuesto) {
+            return $this->json(['error' => 'Presupuesto no encontrado'], Response::HTTP_NOT_FOUND);
+        }
+
+        $servicios = $presupuesto->getServicios();
+        
+        $data = array_map(fn($servicio) => [
+            'id' => $servicio->getId(),
+            'nombre' => $servicio->getNombre(),
+            'precio' => $servicio->getPrecio(),
+            'descripcion' => $servicio->getDescripcion(),
+            'duracionMinutos' => $servicio->getDuracionMinutos(),
+        ], $servicios);
+        
+        return $this->json($data);
     }
 }

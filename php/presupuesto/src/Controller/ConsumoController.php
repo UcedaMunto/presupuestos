@@ -10,6 +10,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 #[Route('/consumo')]
 final class ConsumoController extends AbstractController
@@ -92,4 +93,47 @@ final class ConsumoController extends AbstractController
 
         return $this->redirectToRoute('app_consumo_index', [], Response::HTTP_SEE_OTHER);
     }
+
+    #[Route('/presupuesto/{id}', name: 'app_consumo_presupuesto', methods: ['GET'])]
+    public function getConsumosByPresupuesto(int $id, EntityManagerInterface $entityManager): JsonResponse
+    {
+        $presupuesto = $entityManager->getRepository(Presupuesto::class)->find($id);
+
+        if (!$presupuesto) {
+            return new JsonResponse(['error' => 'Presupuesto no encontrado'], 404);
+        }
+
+        $consumos = $entityManager->getRepository(Consumo::class)->findBy(['presupuesto' => $presupuesto]);
+
+        $data = [];
+        foreach ($consumos as $consumo) {
+            if ($consumo->getProducto() != null or $consumo->getServicio() != null){
+                
+                if( $consumo->getProducto() != null ){
+                    $nombre = $consumo->getProducto()->getNombre();
+                    $tipo = $consumo->getProducto()->getTipoProducto() ? $consumo->getProducto()->getTipoProducto()->getNombre(): null;
+                    $total = $consumo->getProducto()->getPrecio();
+                }else{
+                    $nombre = $consumo->getServicio()->getNombre();
+                    $tipo = $consumo->getServicio()->getTipoProducto() ? $consumo->getServicio()->getTipoProducto()->getNombre(): null;
+                    $total = $consumo->getServicio()->getPrecio();
+                }
+                
+
+                $data[] = [
+                    'id' => $consumo->getId(),
+                    'presupuesto' => $presupuesto->getNombre(),
+                    'nombre' => $nombre,
+                    'tipo'=> $tipo,
+                    'cantidad' => $consumo->getCantidad(),
+                    'costo_consumo' => $consumo->getTotal(),
+                    'costo_prod_servicio' => $total,
+                    'descripcion' => $consumo->getDescripcion(),
+                ];
+            }
+        }
+
+        return new JsonResponse($data);
+    }
+
 }

@@ -31,6 +31,9 @@ class Consumo
     #[ORM\Column(length: 100, nullable: true)]
     private ?string $descripcion = null;
 
+    #[ORM\Column]
+    private ?float $total = null;
+
     // Getters
     public function getId(): ?int
     {
@@ -102,6 +105,18 @@ class Consumo
     public function setDescripcion(?string $descripcion): static
     {
         $this->descripcion = $descripcion;
+
+        return $this;
+    }
+
+    public function getTotal(): ?float
+    {
+        return $this->total;
+    }
+
+    public function setTotal(float $total): static
+    {
+        $this->total = $total;
 
         return $this;
     }

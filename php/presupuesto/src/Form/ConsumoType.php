@@ -10,6 +10,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\MoneyType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 
@@ -35,6 +36,7 @@ class ConsumoType extends AbstractType
                 'class' => Servicio::class,
                 'choice_label' => 'nombre',
                 'required' => false,
+                'disabled' => true,
                 'label' => 'Servicio',
                 'attr' => ['class' => 'form-control']
             ])
@@ -42,10 +44,12 @@ class ConsumoType extends AbstractType
                 'label' => 'Cantidad',
                 'attr' => ['class' => 'form-control']
             ])
-            ->add('frecuencia', IntegerType::class, [
-                'required' => false,
-                'label' => 'Frecuencia',
-                'attr' => ['class' => 'form-control']
+            ->add('total', MoneyType::class, [
+                'required' => true,
+                'label' => 'Total $',
+                'attr' => ['class' => 'form-control'],
+                'currency' => False,
+                'divisor' => 100, // Si guardas los valores en centavos
             ])
             ->add('descripcion', TextType::class, [
                 'required' => false,

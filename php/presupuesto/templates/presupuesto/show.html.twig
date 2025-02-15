@@ -18,6 +18,7 @@
     </div>
 
 
+
     <div class="card shadow mb-12">
         <div class="card-header py-3">
             <h6 class="m-0 font-weight-bold text-primary">Datos del presupuesto</h6>
@@ -74,18 +75,16 @@
 
     <div class="row">
         <div class="col-md-6">
-            {{ include('form/_ajax_form.html.twig', { form_url: path('app_consumo_new') ~ (app.request.query.all() ? '?' ~ app.request.query|url_encode),  button: 'Agregar Consumo', params_data: '?id_presupuesto=' ~ presupuesto.id }) }}
+            {{ include('form/_ajax_form.html.twig', { 
+                script_execute: 'script_dynamic_presupuesto', 
+                form_url: path('app_consumo_new') ~ (app.request.query.all() ? '?' ~ app.request.query|url_encode),  
+                button: 'Agregar Consumo', 
+                params_data: '?id_presupuesto=' ~ presupuesto.id 
+            }) }}
         </div>
         <div class="col-md-6">
 
         </div>
     </div>
-
-
-    
-    
-
-
-   
 
 {% endblock %}
