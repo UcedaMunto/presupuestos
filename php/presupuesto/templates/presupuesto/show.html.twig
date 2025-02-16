@@ -34,10 +34,10 @@
                         <strong>Monto Total:</strong> {{ presupuesto.montoTotal }}
                     </div>
                     <div class="col-md-4">
-                        <strong>Fecha Inicio:</strong> {{ presupuesto.fechaInicio ? presupuesto.fechaInicio|date('Y-m-d') : '' }}
+                        <strong>Fecha Inicio:</strong><label id="fecha_inicio">{{ presupuesto.fechaInicio ? presupuesto.fechaInicio|date('Y-m-d') : '' }}</label> 
                     </div>
                     <div class="col-md-4">
-                        <strong>Fecha Fin:</strong> {{ presupuesto.fechaFin ? presupuesto.fechaFin|date('Y-m-d') : '' }}
+                        <strong>Fecha Fin:</strong><label id="fecha_finalizacion">{{ presupuesto.fechaFin ? presupuesto.fechaFin|date('Y-m-d') : '' }}</label> 
                     </div>
                     <div class="col-md-4">
                         <strong>Estado:</strong> {{ presupuesto.estado ? 'Yes' : 'No' }}
@@ -49,7 +49,7 @@
                         <strong>Fecha Aprobación:</strong> {{ presupuesto.fechaAprobacion ? presupuesto.fechaAprobacion|date('Y-m-d H:i:s') : '' }}
                     </div>
                     <div class="col-md-4">
-                        <strong>Total:</strong> {{ presupuesto.total }}
+                        <strong>Total:</strong> <label id="total_compras">{{ presupuesto.total }}</label> 
                     </div>
                 </div>
             </div>
@@ -57,6 +57,87 @@
     </div>
 
     <br>
+
+    <div class="row">
+        <div class="col-xl-4 col-md-6 mb-4">
+            <div class="card border-left-primary shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-info text-uppercase mb-1">COMPRAS
+                            </div>
+                            <div class="row no-gutters align-items-center">
+                                <div class="col-auto">
+                                    <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">x%</div>
+                                </div>
+                                <div class="col">
+                                    <div class="progress progress-sm mr-2">
+                                        <div class="progress-bar bg-info" role="progressbar" style="width: 50%" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-clipboard-list fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-4 col-md-6 mb-4">
+            <div class="card border-left-info shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-info text-uppercase mb-1">TIEMPO
+                            </div>
+                            <div class="row no-gutters align-items-center">
+                                <div class="col-auto">
+                                    <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800 porcentaje_compras">x%</div>
+                                </div>
+                                <div class="col">
+                                    <div class="progress progress-sm mr-2">
+                                        <div class="progress-bar bg-info porcentaje_compras_progres_bar" role="progressbar" style="width: 50%" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-clipboard-list fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-4 col-md-6 mb-4">
+            <div class="card border-left-info shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Tasks
+                            </div>
+                            <div class="row no-gutters align-items-center">
+                                <div class="col-auto">
+                                    <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">50%</div>
+                                </div>
+                                <div class="col">
+                                    <div class="progress progress-sm mr-2">
+                                        <div class="progress-bar bg-info" role="progressbar" style="width: 50%" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-clipboard-list fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div class="card shadow mb-12">
         <div class="card-header py-3">
             <h6 class="m-0 font-weight-bold text-primary">Consumos Registrados</h6>
@@ -107,11 +188,76 @@
             .then(data => {
                 let tbody = document.querySelector("#consumos-container");
                 setInnerHTMLWithScripts(tbody, data);
+                calcular_porcentaje_compras();
             })
             .catch(error => console.error('Error al cargar los consumos:', error));
         }
+
         document.addEventListener("DOMContentLoaded", function() {
             table_load();
+            
         });
+
+        document.addEventListener("DOMContentLoaded", function() {
+            // Obtener las fechas desde los labels
+            let fechaInicioStr = document.getElementById("fecha_inicio").textContent.trim();
+            let fechaFinalizacionStr = document.getElementById("fecha_finalizacion").textContent.trim();
+
+            if (fechaInicioStr && fechaFinalizacionStr) {
+                // Convertir las fechas a objetos Date
+                let fechaInicio = new Date(fechaInicioStr);
+                let fechaFinalizacion = new Date(fechaFinalizacionStr);
+                let fechaActual = new Date(); // Tomar la fecha actual desde el navegador
+
+                // Asegurar que la fecha actual esté dentro del rango
+                if (fechaActual < fechaInicio) {
+                    fechaActual = fechaInicio;
+                } else if (fechaActual > fechaFinalizacion) {
+                    fechaActual = fechaFinalizacion;
+                }
+
+                // Calcular la diferencia de días
+                let totalDias = (fechaFinalizacion - fechaInicio) / (1000 * 60 * 60 * 24);
+                let diasTranscurridos = (fechaActual - fechaInicio) / (1000 * 60 * 60 * 24);
+
+                // Calcular el porcentaje
+                let porcentaje = Math.round((diasTranscurridos / totalDias) * 100);
+
+                // Asegurar que el porcentaje esté entre 0 y 100
+                porcentaje = Math.max(0, Math.min(100, porcentaje));
+
+                // Insertar el porcentaje en la interfaz
+                document.querySelector(".porcentaje_compras").textContent = `${porcentaje}%`;
+                document.querySelector(".porcentaje_compras_progres_bar").style.width = `${porcentaje}%`;
+                document.querySelector(".porcentaje_compras_progres_bar").setAttribute("aria-valuenow", porcentaje);
+            }
+        });
+
+        function calcular_porcentaje_compras(){
+            let totalComprasStr = document.getElementById("total_compras").textContent.trim();
+            let totalCompradoStr = document.getElementById("total_comprado").textContent.trim();
+
+            // Convertir los valores a números
+            let totalCompras = parseFloat(totalComprasStr);
+            let totalComprado = parseFloat(totalCompradoStr);
+
+            if (!isNaN(totalCompras) && !isNaN(totalComprado) && totalCompras > 0) {
+                // Calcular el porcentaje de compras consumidas
+                let porcentajeCompras = Math.round((totalComprado / totalCompras) * 100);
+
+                // Asegurar que el porcentaje esté entre 0 y 100
+                porcentajeCompras = Math.max(0, Math.min(100, porcentajeCompras));
+
+                // Insertar el porcentaje en la interfaz
+                let comprasText = document.querySelector(".h5.mb-0.mr-3.font-weight-bold.text-gray-800");
+                let progressBar = document.querySelector(".progress-bar");
+
+                if (comprasText && progressBar) {
+                    comprasText.textContent = `${porcentajeCompras}%`;
+                    progressBar.style.width = `${porcentajeCompras}%`;
+                    progressBar.setAttribute("aria-valuenow", porcentajeCompras);
+                }
+            }
+        }
     </script>
 {% endblock %}
