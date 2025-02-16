@@ -47,6 +47,7 @@ class ProductoType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => Producto::class,
+            'csrf_protection' => true, // Habilitar CSRF
         ]);
     }
 }

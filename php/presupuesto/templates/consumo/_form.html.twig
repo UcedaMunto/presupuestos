@@ -1,6 +1,5 @@
 {{ form_start(form, {'action': app.request.uri}) }}
 <div class="container card border-left-warning">
-
     <div class="form-group row">
         <div class="col-md-6">
             {{ form_label(form.presupuesto) }} <br>
@@ -39,11 +38,16 @@
             {{ form_widget(form.cantidad) }}
         </div>
         <div class="col-md-4">
-
+            {{ form_label(form.fecha) }}
+            {{ form_widget(form.fecha, {'attr': {'class': 'form-control'}}) }}
+            {{ form_errors(form.fecha) }}
         </div>
+
+        
     </div>
     <div class="form-group row">
         <div class="col-md-12 text-center">
+            {{ form_rest(form) }} {# Asegura que el CSRF token está incluido #}
             <button class="btn btn-primary">{{ button_label|default('Guardar') }}</button>
         </div>
     </div>

@@ -27,8 +27,8 @@ final class ConsumoController extends AbstractController
         ]);
     }
 
-    #[Route('/new', name: 'app_consumo_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EntityManagerInterface $entityManager ): Response
+    #[Route('/new', name: 'app_consumo_new', methods: ['GET', 'POST'])] 
+    public function new(Request $request, EntityManagerInterface $entityManager )
     {
         $presupuestoId = $request->query->get('id_presupuesto');
         $presupuesto = $entityManager->getRepository(Presupuesto::class)->find( $presupuestoId);
@@ -66,15 +66,15 @@ final class ConsumoController extends AbstractController
     }
 
     #[Route('/{id}/edit', name: 'app_consumo_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, Consumo $consumo, EntityManagerInterface $entityManager): Response
+    public function edit(Request $request, Consumo $consumo, EntityManagerInterface $entityManager)
     {
         $form = $this->createForm(ConsumoType::class, $consumo);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->flush();
-
-            return $this->redirectToRoute('app_consumo_index', [], Response::HTTP_SEE_OTHER);
+            return new JsonResponse(['status' => 'success']);
+            #return $this->redirectToRoute('app_consumo_index', [], Response::HTTP_SEE_OTHER);
         }
 
         return $this->render('consumo/edit.html.twig', [
@@ -84,14 +84,14 @@ final class ConsumoController extends AbstractController
     }
 
     #[Route('/{id}', name: 'app_consumo_delete', methods: ['POST'])]
-    public function delete(Request $request, Consumo $consumo, EntityManagerInterface $entityManager): Response
+    public function delete(Request $request, Consumo $consumo, EntityManagerInterface $entityManager)
     {
         if ($this->isCsrfTokenValid('delete'.$consumo->getId(), $request->getPayload()->getString('_token'))) {
             $entityManager->remove($consumo);
             $entityManager->flush();
         }
-
-        return $this->redirectToRoute('app_consumo_index', [], Response::HTTP_SEE_OTHER);
+        return new JsonResponse(['status' => 'success']);
+        #return $this->redirectToRoute('app_consumo_index', [], Response::HTTP_SEE_OTHER);
     }
 
     #[Route('/presupuesto/{id}', name: 'app_consumo_presupuesto', methods: ['GET'])]
@@ -120,6 +120,7 @@ final class ConsumoController extends AbstractController
 
                 $data[] = [
                     'id' => $consumo->getId(),
+                    'fecha' => $consumo->getFecha(),
                     'presupuesto' => $presupuesto->getNombre(),
                     'nombre' => $nombre,
                     'tipo' => $tipo,

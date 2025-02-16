@@ -1,37 +1,91 @@
-    
-    <div class="container mt-4">
-        <h1 class="text-center mb-4">Consumos del Presupuesto </h1>
+<div class="">
+    <h1 class="text-center mb-4">Consumos del Presupuesto</h1>
 
-        <div class="table-responsive">
-            <table class="table table-striped table-bordered">
-                <thead class="table-dark">
+    <div class="table-responsive contenedor-tabla">
+        <table class="table table-striped table-bordered">
+            <thead class="table-dark">
+                <tr>
+                    <th>ID</th>
+                    <th>Fecha</th>
+                    <th>Nombre</th>
+                    <th>Tipo</th>
+                    <th>Cantidad</th>
+                    <th>Costo Consumo</th>
+                    <th>Costo Unitario</th>
+                    <th>Descripción</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            {% set totalCostoConsumo = 0 %}
+            <tbody>
+                {% for consumo in consumos %}
+                    {% set totalCostoConsumo = totalCostoConsumo + consumo.costo_consumo %}
                     <tr>
-                        <th>ID</th>
-                        <th>Nombre</th>
-                        <th>Tipo</th>
-                        <th>Cantidad</th>
-                        <th>Costo Consumo</th>
-                        <th>Costo Unitario</th>
-                        <th>Descripción</th>
+                        <td>{{ consumo.id }}</td>
+                        <td>{{ consumo.fecha ? consumo.fecha|date('Y-m-d') : '' }}</td>
+                        <td>{{ consumo.nombre }}</td>
+                        <td>{{ consumo.tipo }}</td>
+                        <td>{{ consumo.cantidad }}</td>
+                        <td>{{ consumo.costo_prod_servicio }}</td>
+                        <td>{{ consumo.costo_consumo }}</td>
+                        <td>{{ consumo.descripcion }}</td>
+                        <td>
+                            <form method="post" action="{{ path('app_consumo_delete', {'id': consumo.id}) }}" class="delete-form">
+                                <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ consumo.id) }}">
+                                <button class="btn btn-danger btn-sm">Delete</button>
+                            </form>
+                        </td>
                     </tr>
-                </thead>
-                <tbody>
-                    {% for consumo in consumos %}
-                        <tr>
-                            <td>{{ consumo.id }}</td>
-                            <td>{{ consumo.nombre }}</td>
-                            <td>{{ consumo.tipo }}</td>
-                            <td>{{ consumo.cantidad }}</td>
-                            <td>{{ consumo.costo_consumo }}</td>
-                            <td>{{ consumo.costo_prod_servicio }}</td>
-                            <td>{{ consumo.descripcion }}</td>
-                        </tr>
-                    {% else %}
-                        <tr>
-                            <td colspan="7" class="text-center text-muted">No hay consumos registrados para este presupuesto.</td>
-                        </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        </div>
+                {% else %}
+                    <tr>
+                        <td colspan="9" class="text-center text-muted">No hay consumos registrados para este presupuesto.</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+
+            <tfoot class="table-dark">
+                <tr>
+                    <td colspan="6" class="text-end"><strong>Total:</strong></td>
+                    <td><strong>{{ totalCostoConsumo }}</strong></td>
+                    <td colspan="2"></td>
+                </tr>
+            </tfoot>
+        </table>
     </div>
+</div>
+
+
+<script>
+    document.addEventListener("submit", function (event) {
+    if (event.target.classList.contains("delete-form")) {
+        event.preventDefault();
+
+        if (!confirm("¿Estás seguro de que quieres eliminar este consumo?")) {
+            return;
+        }
+
+        const formData = new FormData(event.target);
+        const actionUrl = event.target.getAttribute("action");
+        const row = event.target.closest("tr");
+
+        fetch(actionUrl, {
+            method: "POST",
+            body: formData,
+            headers: {
+                "X-Requested-With": "XMLHttpRequest"
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.status === "success") {
+                row.remove();
+                table_load();
+            } else {
+                alert("Error al eliminar: " + data.message);
+            }
+        })
+        .catch(error => console.error("Error:", error));
+    }
+});
+
+</script>

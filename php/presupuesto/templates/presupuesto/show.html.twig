@@ -57,10 +57,25 @@
     </div>
 
     <br>
-
+    <div class="card shadow mb-12">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">Consumos Registrados</h6>
+        </div>
+        <div class="card-body">
+            <div id="consumos-container">
+               
+            </div>
+        </div>
+    </div>
+    <br>
     <div class="row">
         <div class="col-md-6">
-            {{ include('form/_ajax_form.html.twig', { form_url: path('app_servicio_new'), button: 'Agregar servicio', 'params_data':"" }) }}
+            {{ include('form/_ajax_form.html.twig', { 
+                form_url: path('app_servicio_new'), 
+                button: 'Agregar servicio', 
+                'params_data':"",
+                post_execute: 'table_load'
+            }) }}
         </div>
         <div class="col-md-6">
             {{ include('form/_ajax_form.html.twig', { form_url: path('app_producto_new'), button: 'Agregar producto', 'params_data':"" }) }}
@@ -75,33 +90,28 @@
                 script_execute: 'script_dynamic_presupuesto', 
                 form_url: path('app_consumo_new') ~ (app.request.query.all() ? '?' ~ app.request.query|url_encode),  
                 button: 'Agregar Consumo', 
-                params_data: '?id_presupuesto=' ~ presupuesto.id 
+                params_data: '?id_presupuesto=' ~ presupuesto.id,
+                post_execute: 'table_load'
             }) }}
         </div>
     </div>
 
     <br>
 
-    <div class="card shadow mb-12">
-        <div class="card-header py-3">
-            <h6 class="m-0 font-weight-bold text-primary">Consumos Registrados</h6>
-        </div>
-        <div class="card-body">
-            <div id="consumos-container">
-               
-            </div>
-        </div>
-    </div>
+    
 
     <script>
-        document.addEventListener("DOMContentLoaded", function() {
+        function table_load(){
             fetch("{{ path('app_consumo_presupuesto', {'id': presupuesto.id}) }}")
-                .then(response => response.text())
-                .then(data => {
-                    let tbody = document.querySelector("#consumos-container");
-                    tbody.innerHTML = data;
-                })
-                .catch(error => console.error('Error al cargar los consumos:', error));
+            .then(response => response.text())
+            .then(data => {
+                let tbody = document.querySelector("#consumos-container");
+                setInnerHTMLWithScripts(tbody, data);
+            })
+            .catch(error => console.error('Error al cargar los consumos:', error));
+        }
+        document.addEventListener("DOMContentLoaded", function() {
+            table_load();
         });
     </script>
 {% endblock %}

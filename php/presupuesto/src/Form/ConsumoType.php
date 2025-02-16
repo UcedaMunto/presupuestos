@@ -13,6 +13,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\MoneyType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use Symfony\Component\Form\Extension\Core\Type\DateType;
 
 class ConsumoType extends AbstractType
 {
@@ -55,14 +56,25 @@ class ConsumoType extends AbstractType
                 'required' => false,
                 'label' => 'Descripción',
                 'attr' => ['class' => 'form-control']
-            ]);
+            ])
+            ->add('fecha', DateType::class, [
+                'widget' => 'single_text', // Esto renderiza un input de tipo date en HTML5
+                'required' => true,
+                'html5' => true,
+                'attr' => [
+                    'class' => 'form-control', // Añadir clases de Bootstrap si lo necesitas
+                ],
+            ])
+            ;
     }
 
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
             'data_class' => Consumo::class,
+            'csrf_protection' => true, // Habilitar CSRF
             'presupuesto' => null, // Define el presupuesto como opción
+            
         ]);
     }
 }

@@ -29,6 +29,7 @@
     </div>
     <div class="form-group row mt-3">
         <div class="col-md-12 text-center">
+            {{ form_rest(form) }} {# Asegura que el CSRF token está incluido #}
             <button class="btn btn-primary">{{ button_label|default('Guardar') }}</button>
         </div>
     </div>

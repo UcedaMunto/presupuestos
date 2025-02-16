@@ -1,5 +1,5 @@
 {% set final_url = form_url ~ params_data ~ (script_execute is defined ? '&script_execute=' ~ script_execute : '') %}
-
+{% set post_execute = (post_execute is defined ? post_execute ~ '();' : '') %}
 
 <div class="form-container">
     <button class="toggle-form-btn btn btn-primary" data-url={{ final_url|raw }}>
@@ -60,14 +60,11 @@
         });
 
         function attachFormSubmitEvent(container) {
-
             const form = container.querySelector("form");
             if (!form) return;
-
             form.addEventListener("submit", function (e) {
                 e.preventDefault();
                 const formData = new FormData(this);
-
                 fetch(this.action, {
                     method: this.method,
                     body: formData,
@@ -75,7 +72,8 @@
                 })
                 .then(response => response.json())
                 .then(data => {
-                    alert("Formulario enviado con éxito");
+                    {{ post_execute }}
+                    alertify.success('Listo!');
                     container.style.display = "none"; // Ocultar después del envío
                     container.innerHTML = ""; // Limpiar contenido para permitir recarga
                     container.closest(".form-container").querySelector(".toggle-form-btn").textContent = "Cargar Formulario";

@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity]
@@ -33,6 +34,9 @@ class Consumo
 
     #[ORM\Column]
     private ?float $total = null;
+
+    #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
+    private ?\DateTimeInterface $fecha = null;
 
     // Getters
     public function getId(): ?int
@@ -117,6 +121,18 @@ class Consumo
     public function setTotal(float $total): static
     {
         $this->total = $total;
+
+        return $this;
+    }
+
+    public function getFecha(): ?\DateTimeInterface
+    {
+        return $this->fecha;
+    }
+
+    public function setFecha(?\DateTimeInterface $fecha): static
+    {
+        $this->fecha = $fecha;
 
         return $this;
     }

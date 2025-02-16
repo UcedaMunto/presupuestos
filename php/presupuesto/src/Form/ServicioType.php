@@ -46,6 +46,7 @@ class ServicioType extends AbstractType{
     {
         $resolver->setDefaults([
             'data_class' => Servicio::class,
+            'csrf_protection' => true, // Habilitar CSRF
         ]);
     }
 }

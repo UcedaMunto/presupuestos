@@ -25,7 +25,7 @@ final class PresupuestoController extends AbstractController
     }
 
     #[Route('/new', name: 'app_presupuesto_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EntityManagerInterface $entityManager): Response
+    public function new(Request $request, EntityManagerInterface $entityManager)
     {
         $presupuesto = new Presupuesto();
         $form = $this->createForm(PresupuestoType::class, $presupuesto);
@@ -34,8 +34,8 @@ final class PresupuestoController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->persist($presupuesto);
             $entityManager->flush();
-
-            return $this->redirectToRoute('app_presupuesto_index', [], Response::HTTP_SEE_OTHER);
+            return new JsonResponse(['status' => 'success']);
+            #return $this->redirectToRoute('app_presupuesto_index', [], Response::HTTP_SEE_OTHER);
         }
 
         return $this->render('presupuesto/new.html.twig', [
@@ -53,15 +53,15 @@ final class PresupuestoController extends AbstractController
     }
 
     #[Route('/{id}/edit', name: 'app_presupuesto_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, Presupuesto $presupuesto, EntityManagerInterface $entityManager): Response
+    public function edit(Request $request, Presupuesto $presupuesto, EntityManagerInterface $entityManager)
     {
         $form = $this->createForm(PresupuestoType::class, $presupuesto);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->flush();
-
-            return $this->redirectToRoute('app_presupuesto_index', [], Response::HTTP_SEE_OTHER);
+            return new JsonResponse(['status' => 'success']);
+            #return $this->redirectToRoute('app_presupuesto_index', [], Response::HTTP_SEE_OTHER);
         }
 
         return $this->render('presupuesto/edit.html.twig', [
