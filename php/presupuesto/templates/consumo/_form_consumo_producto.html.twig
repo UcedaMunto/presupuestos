@@ -29,6 +29,23 @@
                     {{ form_widget(form.producto.tipoProducto) }}
                 </div>
             </div>
+            <div class="form-group row">
+                <div class="col-md-12">
+                    {{ form_label(form.producto.foto1a) }} <br>
+                    {{ form_widget(form.producto.foto1a) }}
+                    <img id="preview1" style="max-width: 150px; display: none;"><br>
+                </div>
+                <div class="col-md-12">
+                    {{ form_label(form.producto.foto2a) }} <br>
+                    {{ form_widget(form.producto.foto2a) }}
+                    <img id="preview2" style="max-width: 150px; display: none;"><br>
+                </div>
+                <div class="col-md-12">
+                    {{ form_label(form.producto.foto3a) }} <br>
+                    {{ form_widget(form.producto.foto3a) }}
+                    <img id="preview3" style="max-width: 150px; display: none;">
+                </div>
+            </div>
         </div>
     </div>
 
@@ -68,22 +85,7 @@
 {% if app.request.query.has('script_execute') %}
     <div id="script-container" data-script="
         function {{ app.request.query.get('script_execute') }}() {
-            const toggleTipo = document.getElementById('toggleTipo');
-            const productoField = document.getElementById('consumo_producto');
-            const servicioField = document.getElementById('consumo_servicio');
-
-            toggleTipo.addEventListener('change', function() {
-                if (this.checked) {
-                    productoField.disabled = true;
-                    servicioField.disabled = false;
-                    productoField.value = ''; // Setear null en producto
-                } else {
-                    productoField.disabled = false;
-                    servicioField.disabled = true;
-                    servicioField.value = ''; // Setear null en servicio
-                    
-                }
-            });
+          
         }
 
         setTimeout(() => {

@@ -52,8 +52,6 @@
         </div>
     </div>
 </div>
-{{ form_end(form) }}
-
 
 {% if app.request.query.has('script_execute') %}
     <div id="script-container" data-script="
@@ -81,4 +79,8 @@
         }, 0);
     "></div>
 {% endif %}
+
+
+
+{{ form_end(form) }}
 

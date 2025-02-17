@@ -10,6 +10,8 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use Vich\UploaderBundle\Form\Type\VichFileType;
+
 
 class ProductoConsumoType extends AbstractType
 {
@@ -34,6 +36,25 @@ class ProductoConsumoType extends AbstractType
                 'class' => TipoProducto::class,
                 'choice_label' => 'nombre',
                 'attr' => ['class' => 'form-control']
+            ])
+            // Sección de imágenes
+            ->add('foto1a', VichFileType::class, [
+                'required' => false,
+                'allow_delete' => true,
+                'download_uri' => true,
+                'label' => 'Foto 1'
+            ])
+            ->add('foto2a', VichFileType::class, [
+                'required' => false,
+                'allow_delete' => true,
+                'download_uri' => true,
+                'label' => 'Foto 2'
+            ])
+            ->add('foto3a', VichFileType::class, [
+                'required' => false,
+                'allow_delete' => true,
+                'download_uri' => true,
+                'label' => 'Foto 3'
             ]);
     }
 

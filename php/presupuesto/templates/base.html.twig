@@ -140,6 +140,13 @@
                 document.body.removeChild(newScript); // Limpia el DOM después de ejecutarlo
             });
         }
+
+        FilePond.create(document.querySelector('.filepond'), {
+            allowMultiple: false, // Solo una imagen
+            imagePreviewHeight: 150, // Altura fija de la imagen
+            stylePanelLayout: 'compact circle', // Diseño más compacto
+        });
+
     </script>
 
 
