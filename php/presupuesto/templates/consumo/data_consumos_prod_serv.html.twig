@@ -11,7 +11,7 @@
                     <th>Tipo</th>
                     <th>Cantidad</th>
                     <th>Costo Consumo</th>
-                    <th>Costo Unitario</th>
+                    <th>Costo</th>
                     <th>Descripción</th>
                     <th>Acciones</th>
                 </tr>
@@ -56,43 +56,38 @@
 
 
 <script>
-    document.addEventListener("submit", function (event) {
-        if (typeof eliminar_consumo === "undefined") {
-            
-            function eliminar_consumo(){
-                console.log("saasassasasasasas")
-                if (event.target.classList.contains("delete-form")) {
-                    event.preventDefault();
+    if (typeof eliminar_consumo === "undefined") {
+        document.addEventListener("submit", function (event) {
+            if (event.target.classList.contains("delete-form")) {
+                event.preventDefault();
 
-                    if (!confirm("¿Estás seguro de que quieres eliminar este consumo?")) {
-                        return;
-                    }
-
-                    const formData = new FormData(event.target);
-                    const actionUrl = event.target.getAttribute("action");
-                    const row = event.target.closest("tr");
-
-                    fetch(actionUrl, {
-                        method: "POST",
-                        body: formData,
-                        headers: {
-                            "X-Requested-With": "XMLHttpRequest"
-                        }
-                    })
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data.status === "success") {
-                            row.remove();
-                            table_load();
-                        } else {
-                            alert("Error al eliminar: " + data.message);
-                        }
-                    })
-                    .catch(error => console.error("Error:", error));
+                if (!confirm("¿Estás seguro de que quieres eliminar este consumo?")) {
+                    return;
                 }
-            }
-        }
-        eliminar_consumo()
-    });
 
+                const formData = new FormData(event.target);
+                const actionUrl = event.target.getAttribute("action");
+                const row = event.target.closest("tr");
+
+                fetch(actionUrl, {
+                    method: "POST",
+                    body: formData,
+                    headers: {
+                        "X-Requested-With": "XMLHttpRequest"
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.status === "success") {
+                        row.remove();
+                        table_load();
+                    } else {
+                        alert("Error al eliminar: " + data.message);
+                    }
+                })
+                .catch(error => console.error("Error:", error));
+            }
+        })
+        eliminar_consumo = true
+    };
 </script>

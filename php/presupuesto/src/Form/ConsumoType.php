@@ -9,7 +9,7 @@ use App\Entity\Servicio;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\MoneyType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
@@ -25,13 +25,6 @@ class ConsumoType extends AbstractType
                 'choice_label' => 'nombre', // Ajusta según el campo del modelo
                 'data' => $options['presupuesto'],
                 'disabled' => true,
-            ])
-            ->add('producto', EntityType::class, [
-                'class' => Producto::class,
-                'choice_label' => 'nombre',
-                'required' => false,
-                'label' => 'Producto',
-                'attr' => ['class' => 'form-control']
             ])
             ->add('servicio', EntityType::class, [
                 'class' => Servicio::class,
@@ -49,10 +42,9 @@ class ConsumoType extends AbstractType
                 'required' => true,
                 'label' => 'Total $',
                 'attr' => ['class' => 'form-control'],
-                'currency' => False,
-                'divisor' => 100, // Si guardas los valores en centavos
+                'currency' => False
             ])
-            ->add('descripcion', TextType::class, [
+            ->add('descripcion', TextareaType::class, [
                 'required' => false,
                 'label' => 'Descripción',
                 'attr' => ['class' => 'form-control']
@@ -64,8 +56,24 @@ class ConsumoType extends AbstractType
                 'attr' => [
                     'class' => 'form-control', // Añadir clases de Bootstrap si lo necesitas
                 ],
-            ])
-            ;
+            ]);
+
+            if ($options['producto_consumido']) {
+                $builder->add('producto', ProductoConsumoType::class, [
+                    'label' => 'Producto'
+                ]);
+
+                $builder->remove('servicio');
+            }else{
+                $builder->add('producto', EntityType::class, [
+                'class' => Producto::class,
+                'choice_label' => 'nombre',
+                'required' => false,
+                'label' => 'Producto',
+                'attr' => ['class' => 'form-control']
+                ]);
+            }
+            
     }
 
     public function configureOptions(OptionsResolver $resolver)
@@ -74,6 +82,7 @@ class ConsumoType extends AbstractType
             'data_class' => Consumo::class,
             'csrf_protection' => true, // Habilitar CSRF
             'presupuesto' => null, // Define el presupuesto como opción
+            'producto_consumido' => false, 
             
         ]);
     }

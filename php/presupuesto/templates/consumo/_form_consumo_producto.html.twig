@@ -1,0 +1,94 @@
+{{ form_start(form, {'action': app.request.uri}) }}
+<div class="container card border-left-warning">
+    <div class="form-group row">
+        <div class="col-md-6">
+            {{ form_label(form.presupuesto) }} <br>
+            {{ form_widget(form.presupuesto) }}
+        </div>
+        <div class="col-md-6">
+            {{ form_label(form.descripcion) }} <br>
+            {{ form_widget(form.descripcion) }}
+        </div>
+    </div>
+
+    <div class="card border-left-success shadow h-100 py-2">
+        <div class="form-group card-body">
+            <div class="row text-xs font-weight-bold text-info text-uppercase mb-1">Datos del producto
+            </div>
+            <div class="form-group row"> 
+                <div class="col-md-4">
+                    {{ form_label(form.producto.nombre) }} <br>
+                    {{ form_widget(form.producto.nombre) }}
+                </div>
+                <div class="col-md-4">
+                    {{ form_label(form.producto.precio) }} <br>
+                    {{ form_widget(form.producto.precio) }}
+                </div>
+                <div class="col-md-4">
+                    {{ form_label(form.producto.tipoProducto) }} <br>
+                    {{ form_widget(form.producto.tipoProducto) }}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card border-left-primary shadow h-100 py-2">
+        <div class="form-group card-body">
+            <div class="row text-xs font-weight-bold text-info text-uppercase mb-1">Datos de la compra total
+            </div>
+            <div class="form-group row"> 
+                <div class="col-md-4">
+                    {{ form_label(form.total) }} <br>
+                    {{ form_widget(form.total) }}
+                </div>
+                <div class="col-md-4">
+                    {{ form_label(form.cantidad) }} <br>
+                    {{ form_widget(form.cantidad) }}
+                </div>
+                <div class="col-md-4">
+                    {{ form_label(form.fecha) }}
+                    {{ form_widget(form.fecha, {'attr': {'class': 'form-control'}}) }}
+                    {{ form_errors(form.fecha) }}
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="form-group row">
+        <div class="col-md-12 text-center">
+            {{ form_rest(form) }} {# Asegura que el CSRF token está incluido #}
+            <button class="btn btn-primary">{{ button_label|default('Guardar') }}</button>
+        </div>
+    </div>
+</div>
+{{ form_end(form) }}
+
+
+{% if app.request.query.has('script_execute') %}
+    <div id="script-container" data-script="
+        function {{ app.request.query.get('script_execute') }}() {
+            const toggleTipo = document.getElementById('toggleTipo');
+            const productoField = document.getElementById('consumo_producto');
+            const servicioField = document.getElementById('consumo_servicio');
+
+            toggleTipo.addEventListener('change', function() {
+                if (this.checked) {
+                    productoField.disabled = true;
+                    servicioField.disabled = false;
+                    productoField.value = ''; // Setear null en producto
+                } else {
+                    productoField.disabled = false;
+                    servicioField.disabled = true;
+                    servicioField.value = ''; // Setear null en servicio
+                    
+                }
+            });
+        }
+
+        setTimeout(() => {
+            {{ app.request.query.get('script_execute') }}();
+        }, 0);
+    "></div>
+{% endif %}
+

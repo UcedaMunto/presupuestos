@@ -72,7 +72,7 @@
                                 </div>
                                 <div class="col">
                                     <div class="progress progress-sm mr-2">
-                                        <div class="progress-bar bg-info" role="progressbar" style="width: 50%" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
+                                        <div class="progress-bar bg-info" role="progressbar" style="width: 0%" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
                                     </div>
                                 </div>
                             </div>
@@ -98,7 +98,7 @@
                                 </div>
                                 <div class="col">
                                     <div class="progress progress-sm mr-2">
-                                        <div class="progress-bar bg-info porcentaje_compras_progres_bar" role="progressbar" style="width: 50%" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
+                                        <div class="progress-bar bg-info porcentaje_compras_progres_bar" role="progressbar" style="width: 0%" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
                                     </div>
                                 </div>
                             </div>
@@ -112,19 +112,19 @@
         </div>
 
         <div class="col-xl-4 col-md-6 mb-4">
-            <div class="card border-left-info shadow h-100 py-2">
+            <div class="card border-left-danger shadow h-100 py-2">
                 <div class="card-body">
                     <div class="row no-gutters align-items-center">
                         <div class="col mr-2">
-                            <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Tasks
+                            <div class="text-xs font-weight-bold text-danger text-uppercase mb-1">Exceso
                             </div>
                             <div class="row no-gutters align-items-center">
                                 <div class="col-auto">
-                                    <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">50%</div>
+                                    <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800 exceso_compras">0%</div>
                                 </div>
                                 <div class="col">
                                     <div class="progress progress-sm mr-2">
-                                        <div class="progress-bar bg-info" role="progressbar" style="width: 50%" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
+                                        <div class="progress-bar bg-danger" role="progressbar" style="width: 0%" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
                                     </div>
                                 </div>
                             </div>
@@ -175,11 +175,17 @@
                 post_execute: 'table_load'
             }) }}
         </div>
+        <div class="col-md-6">
+            {{ include('form/_ajax_form.html.twig', { 
+                script_execute: 'script_dynamic_presupuesto', 
+                form_url: path('app_consumo_new') ~ (app.request.query.all() ? '?' ~ app.request.query|url_encode ),  
+                button: 'Agregar producto y consumo', 
+                params_data: '?id_presupuesto=' ~ presupuesto.id ~ '&producto_consumido=True',
+                post_execute: 'table_load'
+            }) }}
+        </div>
     </div>
-
     <br>
-
-    
 
     <script>
         function table_load(){
@@ -233,7 +239,7 @@
             }
         });
 
-        function calcular_porcentaje_compras(){
+        function calcular_porcentaje_compras() {
             let totalComprasStr = document.getElementById("total_compras").textContent.trim();
             let totalCompradoStr = document.getElementById("total_comprado").textContent.trim();
 
@@ -245,17 +251,42 @@
                 // Calcular el porcentaje de compras consumidas
                 let porcentajeCompras = Math.round((totalComprado / totalCompras) * 100);
 
-                // Asegurar que el porcentaje esté entre 0 y 100
-                porcentajeCompras = Math.max(0, Math.min(100, porcentajeCompras));
-
-                // Insertar el porcentaje en la interfaz
+                // Referencias a los elementos de la interfaz
                 let comprasText = document.querySelector(".h5.mb-0.mr-3.font-weight-bold.text-gray-800");
-                let progressBar = document.querySelector(".progress-bar");
+                let progressBar = document.querySelector(".progress-bar.bg-info");
+
+                let excesoText = document.querySelector(".h5.mb-0.mr-3.font-weight-bold.text-gray-800.exceso_compras");
+                let excesoProgressBar = document.querySelector(".progress-bar.bg-danger");
 
                 if (comprasText && progressBar) {
-                    comprasText.textContent = `${porcentajeCompras}%`;
-                    progressBar.style.width = `${porcentajeCompras}%`;
-                    progressBar.setAttribute("aria-valuenow", porcentajeCompras);
+                    if (porcentajeCompras > 100) {
+                        // Si se excede el presupuesto
+                        comprasText.textContent = `100%`; // Límite visual del progreso normal
+                        progressBar.style.width = `100%`;
+                        progressBar.setAttribute("aria-valuenow", 100);
+
+                        // Calcular el exceso
+                        let porcentajeExceso = porcentajeCompras - 100;
+
+                        // Actualizar la tarjeta de exceso
+                        if (excesoText && excesoProgressBar) {
+                            excesoText.textContent = `${porcentajeExceso}%`;
+                            excesoProgressBar.style.width = `${porcentajeExceso}%`;
+                            excesoProgressBar.setAttribute("aria-valuenow", porcentajeExceso);
+                        }
+                    } else {
+                        // Si está dentro del presupuesto
+                        comprasText.textContent = `${porcentajeCompras}%`;
+                        progressBar.style.width = `${porcentajeCompras}%`;
+                        progressBar.setAttribute("aria-valuenow", porcentajeCompras);
+
+                        // Resetear exceso si no hay
+                        if (excesoText && excesoProgressBar) {
+                            excesoText.textContent = `0%`;
+                            excesoProgressBar.style.width = `0%`;
+                            excesoProgressBar.setAttribute("aria-valuenow", 0);
+                        }
+                    }
                 }
             }
         }

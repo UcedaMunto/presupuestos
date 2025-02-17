@@ -32,6 +32,7 @@ final class ConsumoController extends AbstractController
     {
         $presupuestoId = $request->query->get('id_presupuesto');
         $presupuesto = $entityManager->getRepository(Presupuesto::class)->find( $presupuestoId);
+        $producto_consumido = $request->query->getBoolean('producto_consumido');
 
         if (!$presupuesto) {
             throw $this->createNotFoundException('Presupuesto no encontrado');
@@ -41,20 +42,28 @@ final class ConsumoController extends AbstractController
         $consumo->setPresupuesto($presupuesto); // Asigna el presupuesto
 
         $form = $this->createForm(ConsumoType::class, $consumo, [
-            'presupuesto' => $presupuesto,
+            'presupuesto' => $presupuesto, 'producto_consumido' => $producto_consumido
         ]);
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager->persist($consumo);
+            $entityManager->persist($consumo->getProducto()); // Persistir Producto
+            $entityManager->persist($consumo); // Persistir Consumo
             $entityManager->flush();
 
             return new JsonResponse(['status' => 'success']);
         }
 
-        return $this->render('consumo/_form.html.twig', [
-            'form' => $form->createView(),
-        ]);
+        if( !$producto_consumido ){
+            return $this->render('consumo/_form.html.twig', [
+                'form' => $form->createView(),
+            ]);
+        }else{
+            return $this->render('consumo/_form_consumo_producto.html.twig', [
+                'form' => $form->createView(),
+            ]);
+        }
+        
     }
 
     #[Route('/{id}', name: 'app_consumo_show', methods: ['GET'])]
