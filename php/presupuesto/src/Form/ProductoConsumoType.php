@@ -42,19 +42,19 @@ class ProductoConsumoType extends AbstractType
                 'required' => false,
                 'allow_delete' => true,
                 'download_uri' => true,
-                'label' => 'Foto 1'
+                'label' => 'Foto 1',
             ])
             ->add('foto2a', VichFileType::class, [
                 'required' => false,
                 'allow_delete' => true,
                 'download_uri' => true,
-                'label' => 'Foto 2'
+                'label' => 'Foto 2',
             ])
             ->add('foto3a', VichFileType::class, [
                 'required' => false,
                 'allow_delete' => true,
                 'download_uri' => true,
-                'label' => 'Foto 3'
+                'label' => 'Foto 3',
             ]);
     }
 

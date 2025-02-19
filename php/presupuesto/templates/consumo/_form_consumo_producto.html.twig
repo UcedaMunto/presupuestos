@@ -1,3 +1,35 @@
+{% block stylesheets %}
+    <style>
+        .file-container {
+            position: relative;
+            display: inline-block;
+            cursor: pointer;
+        }
+
+        .file-input {
+            opacity: 0;
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+            cursor: pointer;
+        }
+
+        .camera-icon {
+            font-size: 50px; /* Tamaño grande del icono */
+            color: #007bff;
+            cursor: pointer;
+        }
+
+        .preview-image {
+            max-width: 300px;
+            display: none;
+            margin-top: 10px;
+        }
+    </style>
+{% endblock %}
+
 {{ form_start(form, {'action': app.request.uri}) }}
 <div class="container card border-left-warning">
     <div class="form-group row">
@@ -10,6 +42,8 @@
             {{ form_widget(form.descripcion) }}
         </div>
     </div>
+
+
 
     <div class="card border-left-success shadow h-100 py-2">
         <div class="form-group card-body">
@@ -30,24 +64,46 @@
                 </div>
             </div>
             <div class="form-group row">
-                <div class="col-md-12">
-                    {{ form_label(form.producto.foto1a) }} <br>
-                    {{ form_widget(form.producto.foto1a) }}
-                    <img id="preview1" style="max-width: 150px; display: none;"><br>
+                <div class="col-md-4">
+                    <div class="row">
+                        {{ form_label(form.producto.foto1a) }} <br>
+                        <div class="file-container">
+                            <i class="fas fa-camera camera-icon fa-5x"></i>
+                            {{ form_widget(form.producto.foto1a, {'attr': {'class': 'file-input file_image'}}) }}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <img data-preview-target="foto1a" class="preview-image">
+                    </div>
                 </div>
-                <div class="col-md-12">
-                    {{ form_label(form.producto.foto2a) }} <br>
-                    {{ form_widget(form.producto.foto2a) }}
-                    <img id="preview2" style="max-width: 150px; display: none;"><br>
+                <div class="col-md-4">
+                    <div class="row">
+                        {{ form_label(form.producto.foto2a) }} <br>
+                        <div class="file-container">
+                            <i class="fas fa-camera camera-icon fa-5x"></i>
+                            {{ form_widget(form.producto.foto2a, {'attr': {'class': 'file-input file_image'}}) }}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <img data-preview-target="foto2a" class="preview-image"><br>
+                    </div>
                 </div>
-                <div class="col-md-12">
-                    {{ form_label(form.producto.foto3a) }} <br>
-                    {{ form_widget(form.producto.foto3a) }}
-                    <img id="preview3" style="max-width: 150px; display: none;">
+                <div class="col-md-4">
+                    <div class="row">
+                        {{ form_label(form.producto.foto3a) }} <br>
+                        <div class="file-container">
+                            <i class="fas fa-camera camera-icon fa-5x"></i>
+                            {{ form_widget(form.producto.foto3a, {'attr': {'class': 'file-input file_image'}}) }}
+                        </div>
+                    </div>
+                    <div class="row">
+                    <img data-preview-target="foto3a" class="preview-image">
+                    </div>
                 </div>
             </div>
         </div>
     </div>
+
 
     <div class="card border-left-primary shadow h-100 py-2">
         <div class="form-group card-body">
@@ -84,10 +140,28 @@
 
 {% if app.request.query.has('script_execute') %}
     <div id="script-container" data-script="
+        
         function {{ app.request.query.get('script_execute') }}() {
-          
-        }
+            
+            document.querySelectorAll('.file_image').forEach(input => {
+                input.addEventListener('change', function(event) {
+                    const file = event.target.files[0];
+                    if (file) {
+                        const reader = new FileReader();
+                        reader.onload = function(e) {
+                            // Buscar la imagen correspondiente usando data-preview-target
+                            const previewImage = event.target.closest('.col-md-4').querySelector('img[data-preview-target]');
+                            if (previewImage) {
+                                previewImage.src = e.target.result;
+                                previewImage.style.display = 'block';
+                            }
+                        };
+                        reader.readAsDataURL(file);
+                    }
+                });
+            });
 
+        }
         setTimeout(() => {
             {{ app.request.query.get('script_execute') }}();
         }, 0);
