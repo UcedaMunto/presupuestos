@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Consumo;
 use App\Entity\Presupuesto;
 use App\Form\ConsumoType;
+use App\Form\getConsumosByPresupuesto;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -76,9 +77,15 @@ final class ConsumoController extends AbstractController
 
     #[Route('/{id}/edit', name: 'app_consumo_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Consumo $consumo, EntityManagerInterface $entityManager)
-    {
-        $form = $this->createForm(ConsumoType::class, $consumo);
+    {   
+        $presupuestoId = $request->query->get('id_presupuesto');
+        $presupuesto = $entityManager->getRepository(Presupuesto::class)->find( $presupuestoId);
+        $producto_consumido = $request->query->getBoolean('producto_consumido');
+        $form = $this->createForm(ConsumoType::class, $consumo,[
+            'presupuesto' => $presupuesto, 'producto_consumido' => $producto_consumido
+        ]);
         $form->handleRequest($request);
+        
 
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->flush();
@@ -86,7 +93,7 @@ final class ConsumoController extends AbstractController
             #return $this->redirectToRoute('app_consumo_index', [], Response::HTTP_SEE_OTHER);
         }
 
-        return $this->render('consumo/edit.html.twig', [
+        return $this->render('consumo/_form_consumo_producto.html.twig', [
             'consumo' => $consumo,
             'form' => $form,
         ]);
