@@ -3,19 +3,7 @@
 {% block title %}Presupuesto{% endblock %}
 
 {% block body %}
-    <h1>Presupuesto {{ presupuesto.id }} - {{ presupuesto.nombre }}</h1>
-
-    <div class="row">
-        <div class="col-md-4">
-            <a href="{{ path('app_presupuesto_index') }}" class="btn btn-primary btn-block">Lista de presupuestos</a>
-        </div>
-        <div class="col-md-4">
-            <a href="{{ path('app_presupuesto_edit', {'id': presupuesto.id}) }}" class="btn btn-success btn-block">Editar presupuesto</a>
-        </div>
-        <div class="col-md-4">
-            {{ include('presupuesto/_delete_form.html.twig', { 'btn_class': 'btn btn-warning btn-block' }) }}
-        </div>
-    </div>
+    <h1>Presupuesto - {{ presupuesto.nombre }}</h1>
 
     <div class="card shadow mb-12">
         <div class="card-header py-3">
@@ -57,6 +45,55 @@
     </div>
 
     <br>
+        <br>
+    <div class="row">
+        <div class="col-sm-12 col-12  col-md-6">
+            {{ include('form/_ajax_form.html.twig', { 
+                form_url: path('app_servicio_new'), 
+                button: 'Agregar servicio', 
+                'params_data':"",
+                post_execute: 'table_load'
+            }) }}
+        </div>
+        <div class="col-sm-12 col-12  col-md-6">
+            {{ include('form/_ajax_form.html.twig', { form_url: path('app_producto_new'), button: 'Agregar producto', 'params_data':"" }) }}
+        </div>
+    </div>
+    <br>
+    <div class="row">
+        <div class="col-sm-12 col-12 col-md-6">
+            {{ include('form/_ajax_form.html.twig', { 
+                script_execute: 'script_dynamic_presupuesto', 
+                form_url: path('app_consumo_new') ~ (app.request.query.all() ? '?' ~ app.request.query|url_encode),  
+                button: 'Agregar Consumo', 
+                params_data: '?id_presupuesto=' ~ presupuesto.id,
+                post_execute: 'table_load'
+            }) }}
+        </div>
+        <div class="col-sm-12 col-12  col-md-6">
+            {{ include('form/_ajax_form.html.twig', { 
+                script_execute: 'script_dynamic_presupuesto', 
+                form_url: path('app_consumo_new') ~ (app.request.query.all() ? '?' ~ app.request.query|url_encode ),  
+                button: 'Agregar producto y consumo', 
+                params_data: '?id_presupuesto=' ~ presupuesto.id ~ '&producto_consumido=True',
+                post_execute: 'table_load'
+            }) }}
+        </div>
+    </div>
+    <br>
+
+    <div class="row">
+        <div class="col-md-4">
+            <a href="{{ path('app_presupuesto_index') }}" class="btn btn-primary btn-block">Lista de presupuestos</a>
+        </div>
+        <div class="col-md-4">
+            <a href="{{ path('app_presupuesto_edit', {'id': presupuesto.id}) }}" class="btn btn-success btn-block">Editar presupuesto</a>
+        </div>
+        <div class="col-md-4">
+            {{ include('presupuesto/_delete_form.html.twig', { 'btn_class': 'btn btn-warning btn-block' }) }}
+        </div>
+    </div>
+
 
     <div class="row">
         <div class="col-xl-4 col-md-6 mb-4">
@@ -148,44 +185,7 @@
             </div>
         </div>
     </div>
-    <br>
-    <div class="row">
-        <div class="col-md-6">
-            {{ include('form/_ajax_form.html.twig', { 
-                form_url: path('app_servicio_new'), 
-                button: 'Agregar servicio', 
-                'params_data':"",
-                post_execute: 'table_load'
-            }) }}
-        </div>
-        <div class="col-md-6">
-            {{ include('form/_ajax_form.html.twig', { form_url: path('app_producto_new'), button: 'Agregar producto', 'params_data':"" }) }}
-        </div>
-    </div>
 
-    <br>
-
-    <div class="row">
-        <div class="col-md-6">
-            {{ include('form/_ajax_form.html.twig', { 
-                script_execute: 'script_dynamic_presupuesto', 
-                form_url: path('app_consumo_new') ~ (app.request.query.all() ? '?' ~ app.request.query|url_encode),  
-                button: 'Agregar Consumo', 
-                params_data: '?id_presupuesto=' ~ presupuesto.id,
-                post_execute: 'table_load'
-            }) }}
-        </div>
-        <div class="col-md-6">
-            {{ include('form/_ajax_form.html.twig', { 
-                script_execute: 'script_dynamic_presupuesto', 
-                form_url: path('app_consumo_new') ~ (app.request.query.all() ? '?' ~ app.request.query|url_encode ),  
-                button: 'Agregar producto y consumo', 
-                params_data: '?id_presupuesto=' ~ presupuesto.id ~ '&producto_consumido=True',
-                post_execute: 'table_load'
-            }) }}
-        </div>
-    </div>
-    <br>
 
     <script>
         function table_load(){

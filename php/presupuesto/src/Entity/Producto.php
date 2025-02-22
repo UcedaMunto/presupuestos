@@ -34,6 +34,10 @@ class Producto extends ItemPresupuestario
 
     #[Vich\UploadableField(mapping: 'productos', fileNameProperty: 'foto3')]
     private ?File $foto3a = null;
+
+    #[Vich\UploadableField(mapping: "producto_images", fileNameProperty: "foto1")]
+    private ?string $foto1 = null;
+
     
 
     // Getters
