@@ -4,6 +4,7 @@ namespace App\Form;
 
 use App\Entity\Producto;
 use App\Entity\TipoProducto;
+use App\Entity\Referencia;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -40,7 +41,13 @@ class ProductoType extends AbstractType
                 'class' => TipoProducto::class,
                 'choice_label' => 'nombre',
                 'attr' => ['class' => 'form-control']
-            ]);
+            ])
+            ->add('idReferencia', EntityType::class, [
+                'class' => Referencia::class,
+                'choice_label' => 'referencia',
+                'attr' => ['class' => 'form-control']
+            ])
+            ;
     }
 
     public function configureOptions(OptionsResolver $resolver): void

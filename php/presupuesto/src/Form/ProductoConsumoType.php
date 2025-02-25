@@ -4,6 +4,7 @@ namespace App\Form;
 
 use App\Entity\Producto;
 use App\Entity\TipoProducto;
+use App\Entity\Referencia;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -50,12 +51,13 @@ class ProductoConsumoType extends AbstractType
                 'download_uri' => true,
                 'label' => 'Foto 2',
             ])
-            ->add('foto3a', VichFileType::class, [
-                'required' => false,
-                'allow_delete' => true,
-                'download_uri' => true,
-                'label' => 'Foto 3',
-            ]);
+           
+            ->add('idReferencia', EntityType::class, [
+                'class' => Referencia::class,
+                'choice_label' => 'codigo',
+                'attr' => ['class' => 'form-control']
+            ])
+            ;
     }
 
     public function configureOptions(OptionsResolver $resolver): void

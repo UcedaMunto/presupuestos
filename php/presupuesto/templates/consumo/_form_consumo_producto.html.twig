@@ -31,6 +31,7 @@
 {% endblock %}
 
 {{ form_start(form, {'action': app.request.uri}) }}
+<input type="hidden" name="_csrf_token" value="{{ csrf_token('form_action') }}">
 <div class="container card border-left-warning">
     <div class="form-group row">
         <div class="col-md-6">
@@ -65,6 +66,11 @@
             </div>
             <div class="form-group row">
                 <div class="col-md-4">
+                    {{ form_label(form.producto.idReferencia) }} <br>
+                    {{ form_widget(form.producto.idReferencia) }}
+                </div>
+
+                <div class="col-md-4">
                     <div class="row">
                         {{ form_label(form.producto.foto1a) }} <br>
                         <div class="file-container">
@@ -97,22 +103,7 @@
                         {% endif %}
                     </div>
                 </div>
-                <div class="col-md-4">
-                    <div class="row">
-                        {{ form_label(form.producto.foto3a) }} <br>
-                        <div class="file-container">
-                            <i class="fas fa-camera camera-icon fa-5x"></i>
-                            {{ form_widget(form.producto.foto3a, {'attr': {'class': 'file-input file_image'}}) }}
-                        </div>
-                    </div>
-                    <div class="row">
-                        {% if producto and producto.foto3a is not empty %}
-                            <img src="{{ asset('uploads/' ~ producto.foto3a) }}" data-preview-target="foto3a" class="preview-image" style="display: block;">
-                        {% else %}
-                            <img data-preview-target="foto3a" class="preview-image" style="display: none;">
-                        {% endif %}
-                    </div>
-                </div>
+                
             </div>
         </div>
     </div>

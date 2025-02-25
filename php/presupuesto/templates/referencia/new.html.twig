@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New Referencia{% endblock %}
+
+{% block body %}
+    <h1>Create new Referencia</h1>
+
+    {{ include('referencia/_form.html.twig') }}
+
+    <a href="{{ path('app_referencia_index') }}">back to list</a>
+{% endblock %}

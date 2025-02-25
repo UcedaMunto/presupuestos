@@ -1,0 +1,35 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Referencia index{% endblock %}
+
+{% block body %}
+    <h1>Referencia index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Codigo</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for referencium in referencias %}
+            <tr>
+                <td>{{ referencium.id }}</td>
+                <td>{{ referencium.codigo }}</td>
+                <td>
+                    <a href="{{ path('app_referencia_show', {'id': referencium.id}) }}">show</a>
+                    <a href="{{ path('app_referencia_edit', {'id': referencium.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="3">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_referencia_new') }}">Create new</a>
+{% endblock %}

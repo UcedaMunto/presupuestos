@@ -1,5 +1,6 @@
 {# _form.html.twig para DetallePresupuestoType #}
 {{ form_start(form) }}
+<input type="hidden" name="_csrf_token" value="{{ csrf_token('form_action') }}">
 <div class="container card border-secondary">
     <div class="form-group row">
         <div class="col-md-6">

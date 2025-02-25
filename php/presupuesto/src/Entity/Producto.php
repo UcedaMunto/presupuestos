@@ -38,6 +38,9 @@ class Producto extends ItemPresupuestario
     #[Vich\UploadableField(mapping: "producto_images", fileNameProperty: "foto1")]
     private ?string $foto1 = null;
 
+    #[ORM\ManyToOne]
+    private ?Referencia $idReferencia = null;
+
     
 
     // Getters
@@ -139,5 +142,17 @@ class Producto extends ItemPresupuestario
     public function getFoto3a(): ?File
     {
         return $this->foto3a;
+    }
+
+    public function getIdReferencia(): ?Referencia
+    {
+        return $this->idReferencia;
+    }
+
+    public function setIdReferencia(?Referencia $idReferencia): static
+    {
+        $this->idReferencia = $idReferencia;
+
+        return $this;
     }
 }

@@ -45,23 +45,27 @@
     </div>
 
     <br>
-        <br>
+ 
     <div class="row">
-        <div class="col-sm-12 col-12  col-md-6">
-            {{ include('form/_ajax_form.html.twig', { 
+        <div class="col-sm-12 col-12 col-md-12 col-lg-6 button_form">
+            {{ include('form/_ajax_form.html.twig', {
                 form_url: path('app_servicio_new'), 
                 button: 'Agregar servicio', 
                 'params_data':"",
                 post_execute: 'table_load'
             }) }}
         </div>
-        <div class="col-sm-12 col-12  col-md-6">
-            {{ include('form/_ajax_form.html.twig', { form_url: path('app_producto_new'), button: 'Agregar producto', 'params_data':"" }) }}
+        <div class="col-sm-12 col-12 col-md-12 col-lg-6 button_form">
+            {{ include('form/_ajax_form.html.twig', { 
+                form_url: path('app_producto_new'), 
+                button: 'Agregar producto', 
+                'params_data':"" 
+            }) }}
         </div>
     </div>
-    <br>
+   
     <div class="row">
-        <div class="col-sm-12 col-12 col-md-6">
+        <div class="col-sm-12 col-12 col-md-12 col-lg-6 button_form">
             {{ include('form/_ajax_form.html.twig', { 
                 script_execute: 'script_dynamic_presupuesto', 
                 form_url: path('app_consumo_new') ~ (app.request.query.all() ? '?' ~ app.request.query|url_encode),  
@@ -70,7 +74,7 @@
                 post_execute: 'table_load'
             }) }}
         </div>
-        <div class="col-sm-12 col-12  col-md-6">
+        <div class="col-sm-12 col-12 col-md-12 col-lg-6 button_form">
             {{ include('form/_ajax_form.html.twig', { 
                 script_execute: 'script_dynamic_presupuesto', 
                 form_url: path('app_consumo_new') ~ (app.request.query.all() ? '?' ~ app.request.query|url_encode ),  
@@ -80,8 +84,8 @@
             }) }}
         </div>
     </div>
-    <br>
-
+    
+    <hr>
     <div class="row">
         <div class="col-md-4">
             <a href="{{ path('app_presupuesto_index') }}" class="btn btn-primary btn-block">Lista de presupuestos</a>

@@ -1,4 +1,5 @@
 {{ form_start(form, {'action': app.request.uri}) }}
+<input type="hidden" name="_csrf_token" value="{{ csrf_token('form_action') }}">
 <div class="container card border-left-warning">
     <div class="form-group row">
         <div class="col-md-6">
