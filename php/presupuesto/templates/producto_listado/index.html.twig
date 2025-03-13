@@ -1,0 +1,46 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}ProductoListado index{% endblock %}
+
+{% block body %}
+    <h1>ProductoListado index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Nombre</th>
+                <th>Cantidad</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for producto_listado in producto_listados %}
+            <tr>
+                <td>{{ producto_listado.id }}</td>
+                <td>{{ producto_listado.nombre }}</td>
+                <td>{{ producto_listado.cantidad }}</td>
+                <td>
+                    <a href="{{ path('app_producto_listado_show', {'id': producto_listado.id}) }}">show</a>
+                    <a href="{{ path('app_producto_listado_edit', {'id': producto_listado.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="4">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    
+    <div class="col-sm-12 col-12 col-md-12 col-lg-6 button_form">
+        {{ include('form/_ajax_form.html.twig', { 
+            form_url: path('app_producto_listado_new'), 
+            button: 'Agregar producto', 
+            'params_data':"" 
+        }) }}
+    </div>
+
+
+{% endblock %}

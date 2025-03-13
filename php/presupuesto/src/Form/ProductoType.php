@@ -44,7 +44,7 @@ class ProductoType extends AbstractType
             ])
             ->add('idReferencia', EntityType::class, [
                 'class' => Referencia::class,
-                'choice_label' => 'referencia',
+                'choice_label' => 'codigo',
                 'attr' => ['class' => 'form-control']
             ])
             ;

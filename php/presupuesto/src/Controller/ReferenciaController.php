@@ -9,6 +9,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Attribute\Route;
 
 #[Route('/referencia')]
@@ -19,6 +20,27 @@ final class ReferenciaController extends AbstractController
     {
         return $this->render('referencia/index.html.twig', [
             'referencias' => $referenciaRepository->findAll(),
+        ]);
+    }
+
+    #[Route('/api', name: 'app_referencia_api_list', methods: ['GET'])]
+    public function apiList(Request $request, ReferenciaRepository $referenciaRepository): JsonResponse
+    {
+        $term = $request->query->get('term', '');
+        
+        $referencias = $referenciaRepository->findByTerm($term);
+        
+        $results = [];
+        foreach ($referencias as $referencia) {
+            $results[] = [
+                'id' => $referencia->getId(),
+                'text' => $referencia->getCodigo(), // Ajusta esto según la propiedad que quieras mostrar
+                // Puedes agregar más campos si los necesitas
+            ];
+        }
+        
+        return new JsonResponse([
+            'results' => $results
         ]);
     }
 

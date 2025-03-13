@@ -169,6 +169,38 @@
         setTimeout(() => {
             {{ app.request.query.get('script_execute') }}();
         }, 0);
+
+        $(document).ready(function() {
+            $('.select2-referencias').select2({
+                theme: 'classic',
+                language: 'es',
+                ajax: {
+                    url: '/referencia/api',
+                    dataType: 'json',
+                    delay: 250,
+                    data: function (params) {
+                        return {
+                            term: params.term || '',
+                            page: params.page || 1
+                        };
+                    },
+                    processResults: function (data, params) {
+                        params.page = params.page || 1;
+                        
+                        return {
+                            results: data.results,
+                            pagination: {
+                                more: false // Puedes implementar paginación si lo necesitas
+                            }
+                        };
+                    },
+                    cache: true
+                },
+                minimumInputLength: 3,
+                placeholder: 'Buscar referencia...',
+                allowClear: true
+            });
+        });
     "></div>
 {% endif %}
 

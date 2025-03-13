@@ -122,4 +122,24 @@ final class PresupuestoController extends AbstractController
         
         return $this->json($data);
     }
+
+    #[Route('/{id}/plan', name: 'app_presupuesto_plan', methods: ['GET', 'POST'])]
+    public function plan(Request $request, Presupuesto $presupuesto, EntityManagerInterface $entityManager)
+    {
+        $form = $this->createForm(PresupuestoType::class, $presupuesto);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $entityManager->flush();
+            return new JsonResponse(['status' => 'success']);
+            #return $this->redirectToRoute('app_presupuesto_index', [], Response::HTTP_SEE_OTHER);
+        }
+
+        return $this->render('presupuesto/edit.html.twig', [
+            'presupuesto' => $presupuesto,
+            'form' => $form,
+        ]);
+    }
+
+    
 }

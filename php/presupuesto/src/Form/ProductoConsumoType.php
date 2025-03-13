@@ -51,11 +51,17 @@ class ProductoConsumoType extends AbstractType
                 'download_uri' => true,
                 'label' => 'Foto 2',
             ])
-           
             ->add('idReferencia', EntityType::class, [
                 'class' => Referencia::class,
-                'choice_label' => 'codigo',
-                'attr' => ['class' => 'form-control']
+                'choice_label' => 'codigo', // Ajusta según la propiedad que quieras mostrar
+                'placeholder' => 'Selecciona una referencia',
+                'required' => true,
+                'attr' => [
+                    'class' => 'select2-referencias',
+                    'data-ajax--url' => '/referencia/api',
+                    'data-ajax--delay' => '250',
+                    'data-placeholder' => 'Buscar referencia...',
+                ],
             ])
             ;
     }

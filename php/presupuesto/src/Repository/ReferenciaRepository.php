@@ -40,4 +40,29 @@ class ReferenciaRepository extends ServiceEntityRepository
     //            ->getOneOrNullResult()
     //        ;
     //    }
+
+    public function findByCodigoPartial(string $codigo)
+    {
+        return $this->createQueryBuilder('r')
+            ->where('r.codigo LIKE :codigo')
+            ->setParameter('codigo', '%' . $codigo . '%')
+            ->orderBy('r.codigo', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
+
+    public function findByTerm(string $term = '')
+    {
+        $qb = $this->createQueryBuilder('r');
+        
+        if ($term) {
+            $qb->where('r.codigo LIKE :term OR r.codigo LIKE :term')
+               ->setParameter('term', '%' . $term . '%');
+        }
+        
+        return $qb->orderBy('r.codigo', 'ASC')
+                 ->setMaxResults(20)
+                 ->getQuery()
+                 ->getResult();
+    }
 }
