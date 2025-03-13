@@ -13,10 +13,10 @@ services:
     environment:
       - SYMFONY_ENV=dev
     ports:
-      - "8080:80"  # Apache usará el puerto 80 en el contenedor
+      - "80:80"  # Apache usará el puerto 80 en el contenedor
     networks:
       - symfony_network
 
 networks:
   symfony_network:
-    driver: bridge
+      driver: bridge
