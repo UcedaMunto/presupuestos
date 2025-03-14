@@ -29,7 +29,7 @@ jobs:
       - name: Build and push container image to Azure Container Registry
         run: |
           echo "Logging in to Azure Container Registry..."
-          az acr login --name ${{ secrets.PRESUPUESTOSAPP_REGISTRY_URL }}
+          az acr login --name ${{ secrets.PRESUPUESTOSAPP_REGISTRY_NAME }}
 
           echo "Building Docker image..."
           docker build -t ${{ secrets.PRESUPUESTOSAPP_REGISTRY_URL }}/presupuestos-app:${{ github.sha }} .
