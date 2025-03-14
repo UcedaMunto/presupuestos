@@ -1,24 +1,21 @@
 name: Trigger auto deployment for presupuestos-app
 
-# When this action will be executed
 on:
-  # Automatically trigger it when detected changes in repo
   push:
     branches: 
       [ main ]
     paths:
-    - '**'
-    - '.github/workflows/presupuestos-app-AutoDeployTrigger-02db7007-8e71-4bc9-ae04-ed64a7d619f7.yml'
+      - '**'
+      - '.github/workflows/presupuestos-app-AutoDeployTrigger.yml'
 
-  # Allow manual trigger 
-  workflow_dispatch:      
+  workflow_dispatch:
 
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
     permissions: 
-      id-token: write #This is required for requesting the OIDC JWT Token
-      contents: read #Required when GH token is used to authenticate with private repo
+      id-token: write
+      contents: read
 
     steps:
       - name: Checkout to the branch
@@ -29,18 +26,27 @@ jobs:
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
 
-      - name: Build and push container image to registry
+      - name: Build and push container image to Azure Container Registry
+        run: |
+          echo "Logging in to Azure Container Registry..."
+          az acr login --name ${{ secrets.PRESUPUESTOSAPP_REGISTRY_URL }}
+
+          echo "Building Docker image..."
+          docker build -t ${{ secrets.PRESUPUESTOSAPP_REGISTRY_URL }}/presupuestos-app:${{ github.sha }} .
+
+          echo "Logging in to Docker..."
+          echo "${{ secrets.PRESUPUESTOSAPP_REGISTRY_PASSWORD }}" | docker login ${{ secrets.PRESUPUESTOSAPP_REGISTRY_URL }} -u ${{ secrets.PRESUPUESTOSAPP_REGISTRY_USERNAME }} --password-stdin
+
+          echo "Pushing Docker image..."
+          docker push ${{ secrets.PRESUPUESTOSAPP_REGISTRY_URL }}/presupuestos-app:${{ github.sha }}
+
+      - name: Deploy to Azure Container Apps
         uses: azure/container-apps-deploy-action@v2
         with:
-          appSourcePath: ${{ github.workspace }}
-          _dockerfilePathKey_: _dockerfilePath_
-          registryUrl: 
-          registryUsername: ${{ secrets.PRESUPUESTOSAPP_REGISTRY_USERNAME }}
-          registryPassword: ${{ secrets.PRESUPUESTOSAPP_REGISTRY_PASSWORD }}
           containerAppName: presupuestos-app
           resourceGroup: PRUEBA2025
-          imageToBuild: default/[parameters('containerAppName')]:${{ github.sha }}
-          _buildArgumentsKey_: |
-            _buildArgumentsValues_
-
+          imageToDeploy: ${{ secrets.PRESUPUESTOSAPP_REGISTRY_URL }}/presupuestos-app:${{ github.sha }}
+          registryUrl: ${{ secrets.PRESUPUESTOSAPP_REGISTRY_URL }}
+          registryUsername: ${{ secrets.PRESUPUESTOSAPP_REGISTRY_USERNAME }}
+          registryPassword: ${{ secrets.PRESUPUESTOSAPP_REGISTRY_PASSWORD }}
 
