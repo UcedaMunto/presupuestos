@@ -49,4 +49,4 @@ jobs:
           registryUrl: ${{ secrets.PRESUPUESTOSAPP_REGISTRY_URL }}
           registryUsername: ${{ secrets.PRESUPUESTOSAPP_REGISTRY_USERNAME }}
           registryPassword: ${{ secrets.PRESUPUESTOSAPP_REGISTRY_PASSWORD }}
-
+ 
