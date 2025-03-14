@@ -32,7 +32,7 @@ jobs:
           az acr login --name ${{ secrets.PRESUPUESTOSAPP_REGISTRY_NAME }}
 
           echo "Building Docker image..."
-          docker build -t ${{ secrets.PRESUPUESTOSAPP_REGISTRY_URL }}/presupuestos-app:${{ github.sha }} .
+          docker build -t ${{ secrets.PRESUPUESTOSAPP_REGISTRY_URL }}/presupuestos-app:${{ github.sha }} -f php/presupuesto/Dockerfile php/presupuesto/
 
           echo "Logging in to Docker..."
           echo "${{ secrets.PRESUPUESTOSAPP_REGISTRY_PASSWORD }}" | docker login ${{ secrets.PRESUPUESTOSAPP_REGISTRY_URL }} -u ${{ secrets.PRESUPUESTOSAPP_REGISTRY_USERNAME }} --password-stdin
