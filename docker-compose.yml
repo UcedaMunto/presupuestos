@@ -3,7 +3,7 @@ version: "3.8"
 services:
   app:
     build:
-      context: ./php
+      context: ./php/presupuesto
     container_name: symfony_app
     extra_hosts:
       - "host.docker.internal:host-gateway"
